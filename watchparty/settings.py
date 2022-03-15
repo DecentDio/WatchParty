@@ -83,8 +83,11 @@ WSGI_APPLICATION = 'watchparty.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd5drr3j9k0o69',
+        'USER': 'rzrwcialglgbjg',
+        'PASSWORD': '5159b726ece674d327cfdcc6f632c7f3c6f2837a9394a19f529df8a148c284f6',
+        'PORT': '5432',
     }
 }
 
@@ -134,7 +137,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 try:
     if 'HEROKU' in os.environ:
         import django_heroku
@@ -146,6 +148,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID = 2
 LOGIN_REDIRECT_URL = ''

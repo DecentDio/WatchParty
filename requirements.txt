@@ -10,3 +10,6 @@ gunicorn
 django-heroku
 
 django-allauth
+
+psycopg2
+
