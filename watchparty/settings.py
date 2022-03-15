@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,17 +80,24 @@ WSGI_APPLICATION = 'watchparty.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd5drr3j9k0o69',
-        'USER': 'rzrwcialglgbjg',
-        'PASSWORD': '5159b726ece674d327cfdcc6f632c7f3c6f2837a9394a19f529df8a148c284f6',
-        'HOST': 'ec2-52-7-159-155.compute-1.amazonaws.com',
-        'PORT': '5432',
+if 'test' in sys.argv:
+    DATABASES = {
+        'default':{
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'mydatabase'
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd5drr3j9k0o69',
+            'USER': 'rzrwcialglgbjg',
+            'PASSWORD': '5159b726ece674d327cfdcc6f632c7f3c6f2837a9394a19f529df8a148c284f6',
+            'HOST': 'ec2-52-7-159-155.compute-1.amazonaws.com',
+            'PORT': '5432',
+        }
+    }
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
