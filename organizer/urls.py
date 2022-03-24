@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.login, name='login'),
+    path('watchparties', views.WatchParties.as_view(), name='watchparties'),
 ]

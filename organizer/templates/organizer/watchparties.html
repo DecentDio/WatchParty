@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Watch Parties</title>
+</head>
+<body>
+    {% if watchparties_list %}
+        <ul class = "list-group">
+        {% for question in watchparties_list %}
+            <li class="list-group-item text-center"><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No watchparties are available.</p>
+    {% endif %}
+</body>
+</html>
