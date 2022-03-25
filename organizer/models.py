@@ -1,6 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class WatchParty(models.Model):
+class Watchparty(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
     title_text = models.CharField(max_length=200)
     start_date = models.DateField('date range start')
     end_date = models.DateField('date range end')
