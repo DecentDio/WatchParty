@@ -9,7 +9,7 @@
     <h1>Watch Party Organizer</h1>
     {% if user.is_authenticated %}
     <p>Welcome, {{ user.username }} !</p>
-
+    <a href="{% url 'organizer:watchparties' %}">My WatchParties</a>
     {% else %}
     <h1>Watch Party Organizer</h1>
     <a href="{% provider_login_url 'google' %}">Login with Google</a>
