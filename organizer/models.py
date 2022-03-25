@@ -9,6 +9,12 @@ class Watchparty(models.Model):
     def __str__(self):
         return self.title_text
 
+class AddedUser(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
+    watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
+
 class AvailabilityRange(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
+    watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
     start_time = models.DateTimeField(auto_now=False)
     end_time = models.DateTimeField(auto_now=False)

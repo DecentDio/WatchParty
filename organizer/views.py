@@ -11,3 +11,7 @@ class WatchParties(generic.ListView):
     context_object_name = 'watchparties_list'
     def get_queryset(self):
         return Watchparty.objects.order_by('title_text')
+
+class DetailView(generic.DetailView):
+    model = Watchparty
+    template_name = 'organizer/detail.html'
