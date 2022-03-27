@@ -10,7 +10,8 @@ class Watchparty(models.Model):
 
     def __str__(self):
         return self.title_text
-
+    def valid_date_range(self):
+        return self.end_date >= self.start_date
 
 class AddedUser(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
