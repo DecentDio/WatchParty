@@ -1,3 +1,8 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'organizer/style.css' %}">
+
+
 {% load socialaccount %}
 <html>
 
@@ -8,10 +13,10 @@
 <body>
     <h1>Watch Party Organizer</h1>
     {% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }} !</p>
+    <p>Welcome, {{ user.username }}!</p>
     <a href="{% url 'organizer:watchparties' %}">My WatchParties</a>
     {% else %}
-    <h1>Watch Party Organizer</h1>
+    <!-- <h1>Watch Party Organizer</h1> this is a bug--> 
     <a href="{% provider_login_url 'google' %}">Login with Google</a>
     {% endif %}
 
