@@ -1,0 +1,15 @@
+<fieldset>
+    <legend><h1>{{ watchparty.title_text }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <h1>Start Date: {{ watchparty.start_date}}</h1>
+    <h1>End Date: {{ watchparty.end_date}}</h1>
+    <h1>Added Users:</h1>
+    {% for account in watchparty.addeduser_set.all %}
+        {{ account.account }}
+    {% endfor %}
+    <h1>Availability Ranges:</h1>
+    {% for range in watchparty.availabilityrange_set.all %}
+        for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
+    {% endfor %}
+</fieldset>

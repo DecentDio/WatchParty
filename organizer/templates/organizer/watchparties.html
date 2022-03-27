@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load socialaccount %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <big>{{user}}'s Watch Parties</big>
+</head>
+<body>
+    {% if watchparties_list %}
+        <ul class = "list-group">
+        {% for watchparty in watchparties_list %}
+            {% if watchparty.account == user  %}
+                <li class="list-group-item text-center"><a href="{% url 'organizer:detail' watchparty.id %}">{{ watchparty.title_text }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No watchparties are available.</p>
+    {% endif %}
+    <a href = "{% url 'organizer:form' %}" > Create WatchParty </a>
+</body>
+</html>
