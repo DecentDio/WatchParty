@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Textarea, DateInput
-from .models import Watchparty, AddedUser, AvailabilityRange
+from .models import Watchparty, AddedUser, AvailabilityRange, MovieSearcher
 
 
 class CreateWatchParty(ModelForm):
@@ -24,6 +24,15 @@ class CreateAvailabilityRange(ModelForm):
         model = AvailabilityRange
         fields = "__all__"
         widgets = {
-            'start_time': DateInput(attrs={'type': 'datetime-local'}, format = '%H:%M'),
+            'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%H:%M'),
             'end_time': DateInput(attrs={'type': 'datetime-local'}, format='%H:%M')
+        }
+
+
+class CreateMovieSearch(ModelForm):
+    class Meta:
+        model = MovieSearcher
+        fields = "__all__"
+        widgets = {
+            'Movie Title:': Textarea()
         }

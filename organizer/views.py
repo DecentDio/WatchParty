@@ -1,6 +1,7 @@
+from imdb import Cinemagoer
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
-from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange
+from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch
 from django.http import HttpResponseRedirect
 from .models import Watchparty, AvailabilityRange
 from django.urls import reverse
@@ -53,3 +54,13 @@ def GetAvil(request):
     else:
         form = CreateAvailabilityRange()
     return render(request, "organizer/avilPost.html", {"form": form})
+
+
+def MovieSearch(request):
+    if request.method == "POST":
+        form = CreateMovieSearch(request.POST)
+        form.save()
+        return redirect("/watchparties")
+    else:
+        form = CreateMovieSearch()
+    return render(request, "organizer/movie.html", {"form": form})
