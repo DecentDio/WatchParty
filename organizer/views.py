@@ -73,9 +73,6 @@ def MovieSearch(request):
             return redirect("/watchparties")
     else:
         form = CreateMovieSearch()
-    test = form.cleaned_data
-    check = test['search']
-    context = {'form': form, "check": check}
-    return render(request, "organizer/movie.html", context)
+    return render(request, "organizer/movie.html", {"form": form})
 
 
