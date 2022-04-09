@@ -39,3 +39,4 @@ class MovieSearcher(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
     search = models.CharField(max_length=100)
+

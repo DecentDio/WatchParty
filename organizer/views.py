@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch
 from django.http import HttpResponseRedirect
-from .models import Watchparty, AvailabilityRange
+from .models import Watchparty, MovieSearcher
 from django.urls import reverse
 from django.utils import timezone
+from collections import Counter
 
 
 def login(request):
@@ -23,6 +24,14 @@ class WatchParties(generic.ListView):
 class DetailView(generic.DetailView):
     model = Watchparty
     template_name = 'organizer/detail.html'
+    counter = 0
+    c = Counter(MovieSearcher.objects.values_list('search'))
+
+    extra_context = {'search': c}
+
+
+
+
 
 
 def GetParty(request):
@@ -59,8 +68,14 @@ def GetAvil(request):
 def MovieSearch(request):
     if request.method == "POST":
         form = CreateMovieSearch(request.POST)
-        form.save()
-        return redirect("/watchparties")
+        if form.is_valid():
+            form.save()
+            return redirect("/watchparties")
     else:
         form = CreateMovieSearch()
-    return render(request, "organizer/movie.html", {"form": form})
+    test = form.cleaned_data
+    check = test['search']
+    context = {'form': form, "check": check}
+    return render(request, "organizer/movie.html", context)
+
+
