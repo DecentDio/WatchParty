@@ -40,6 +40,5 @@ class MovieSearcher(models.Model):
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
     search = models.CharField(max_length=100)
 
-
 class ListOfMovies(models.Model):
     x = models.CharField(max_length=100)

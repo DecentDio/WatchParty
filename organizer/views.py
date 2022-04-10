@@ -25,10 +25,17 @@ class DetailView(generic.DetailView):
     model = Watchparty
     template_name = 'organizer/detail.html'
     full = {}
-    c = Counter(MovieSearcher.objects.values_list('search'))
-    for i in MovieSearcher.objects.values_list('search'):
-        full[i] = c[i]
+
+    for movieVote in MovieSearcher.objects.all():
+        if (movieVote.watchparty, movieVote.search) in full.keys():
+            full[(movieVote.watchparty, movieVote.search)] += 1
+        else:
+            full[(movieVote.watchparty, movieVote.search)] = 1
+    #c = Counter(MovieSearcher.objects.values_list('search'))
+    #for i in MovieSearcher.objects.values_list('search'):
+       #full[i] = c[i]
     extra_context = {'search': full}
+
 
 
 class MovieIMDB(generic.ListView):
@@ -36,20 +43,23 @@ class MovieIMDB(generic.ListView):
     template_name = 'organizer/listOfMovies.html'
     movie = ""
     whatever = []
-    for i in ListOfMovies.objects.values_list('x'):
-        movie = i[0]
+    #for i in ListOfMovies.objects.values_list('x'):
+    #    movie = i[0]
+    lastMovieID = int(MovieSearcher.objects.last().id)
+    movie = MovieSearcher.objects.get(pk=lastMovieID).search
+    #movie = MovieSearcher.objects.last().search
     ia = Cinemagoer()
     realList = ia.search_movie(movie)
     for j in range(len(realList)):
         whatever.append(realList[j]["title"])
     extra_context = {'xy': whatever}
 
-    def post(self, request):
-        myVar = request.POST.get("movies")
-        s = MovieSearcher.objects.latest('search')
-        s.search = myVar
-        s.save()
-        return redirect("/watchparties")
+#    def post(self, request):
+ #       myVar = request.POST.get("movies")
+  #      s = MovieSearcher.objects.last()
+   #     s.search = myVar
+    #    s.save()
+     #   return redirect("/watchparties")
 
 
 def GetParty(request):
@@ -87,10 +97,10 @@ def MovieSearch(request):
     if request.method == "POST":
         form = CreateMovieSearch(request.POST)
         form.save()
-        something = form.cleaned_data
-        t = ListOfMovies.objects.get()
-        t.x = something['search']
-        t.save()
+        #something = form.cleaned_data
+        #t = MovieSearcher.objects.last()
+        #t.x = something['search']
+        #t.save()
         return redirect("/listOfMovies")
     else:
         form = CreateMovieSearch()

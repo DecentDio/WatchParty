@@ -12,7 +12,13 @@
         for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
     {% endfor %}
     <h1>Movies</h1>
-    {{search}}
+    <br>
+    {% for key, value in search.items %}
+        {% if watchparty.title_text == key.0|stringformat:"s" %}
+            "{{key.1}}" has {{value}} votes <br>
+        {% endif %}
+    {% endfor %}
+
     <h1>Add more movies</h1>
     <a href = "{% url 'organizer:movies' %}" > Add a movie </a>
 </fieldset>
