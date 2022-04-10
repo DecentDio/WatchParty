@@ -10,5 +10,6 @@ urlpatterns = [
     path("addAvil", views.GetAvil, name="avil"),
     path('watchparties', views.WatchParties.as_view(), name='watchparties'),
     path('moviesearch', views.MovieSearch, name='movies'),
+    path('listOfMovies', views.MovieIMDB.as_view(), name='list'),
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),
 ]

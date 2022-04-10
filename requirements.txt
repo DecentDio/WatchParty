@@ -1,5 +1,5 @@
 # Django is needed to run Django
-Django
+Django~=4.0.3
 
 # gunicorn is needed by Heroku to launch the web server
 gunicorn
