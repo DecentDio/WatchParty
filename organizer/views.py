@@ -7,11 +7,15 @@ from .models import Watchparty, MovieSearcher, ListOfMovies
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
+from django.contrib.auth import logout
 
 
 def login(request):
     return render(request, 'organizer/login.html', {})
 
+def logout_view(request):
+    logout(request)
+    return render(request, 'organizer/login.html', {})
 
 class WatchParties(generic.ListView):
     template_name = 'organizer/watchparties.html'
