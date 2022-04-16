@@ -20,10 +20,18 @@
     {% endfor %}
 
     <h1>Add more movies</h1>
-    <form type="get" action="/search">
+    <h2>Manually add Movie:</h2>
+    <h2>Search for a movie:</h2>
+    <form type="get" action=".">
         <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-        <button id= "search_submit" type ="submit" >Submit</button>
+        <button id= "search_submit" type ="submit" >Search</button>
     </form>
+
+    {% for range in searchResults %}
+        <input type="radio" id="{{range}}" name="movies" value="{{range}}">
+        <label for="{{range}}"> {{range}} </label><br>
+    {% endfor %}
+    <button type = "submit" class = "save btn btn-dark"> Submit </button>
 
     <!-- <a href = "{% url 'organizer:movies' %}" > Add a movie </a> -->
 

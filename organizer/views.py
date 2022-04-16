@@ -27,18 +27,21 @@ class WatchParties(generic.ListView):
 
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
-    #template_name = 'organizer/detail.html'
     full = {}
+    searchResults = []
+    if "search_box" in request.GET:
+        searchTerm = request.GET['search_box']
+        ia = Cinemagoer()
+        realList = ia.search_movie(searchTerm)
+        for j in range(len(realList)):
+            searchResults.append(realList[j]["title"])
 
     for movieVote in MovieSearcher.objects.all():
         if (movieVote.watchparty, movieVote.search) in full.keys():
             full[(movieVote.watchparty, movieVote.search)] += 1
         else:
             full[(movieVote.watchparty, movieVote.search)] = 1
-    #c = Counter(MovieSearcher.objects.values_list('search'))
-    #for i in MovieSearcher.objects.values_list('search'):
-       #full[i] = c[i]
-    return render(request, "organizer/detail.html", {"watchparty": watchparty, "search": full})
+    return render(request, "organizer/detail.html", {"watchparty": watchparty, "search": full, "searchResults": searchResults})
 
 
 
