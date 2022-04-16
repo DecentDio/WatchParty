@@ -8,7 +8,7 @@
 <body>
 <form method="POST" class = "post-form">
     {% csrf_token %}
-    {% for range in xy %}
+    {% for range in searchResults %}
         <input type="radio" id="{{range}}" name="movies" value="{{range}}">
         <label for="{{range}}"> {{range}} </label><br>
     {% endfor %}

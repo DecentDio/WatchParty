@@ -20,5 +20,11 @@
     {% endfor %}
 
     <h1>Add more movies</h1>
-    <a href = "{% url 'organizer:movies' %}" > Add a movie </a>
+    <form type="get" action="/search">
+        <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+        <button id= "search_submit" type ="submit" >Submit</button>
+    </form>
+
+    <!-- <a href = "{% url 'organizer:movies' %}" > Add a movie </a> -->
+
 </fieldset>

@@ -25,9 +25,9 @@ class WatchParties(generic.ListView):
         return Watchparty.objects.order_by('title_text')
 
 
-class DetailView(generic.DetailView):
-    model = Watchparty
-    template_name = 'organizer/detail.html'
+def DetailView(request, pk):
+    watchparty = Watchparty.objects.get(pk=pk)
+    #template_name = 'organizer/detail.html'
     full = {}
 
     for movieVote in MovieSearcher.objects.all():
@@ -38,32 +38,21 @@ class DetailView(generic.DetailView):
     #c = Counter(MovieSearcher.objects.values_list('search'))
     #for i in MovieSearcher.objects.values_list('search'):
        #full[i] = c[i]
-    extra_context = {'search': full}
+    return render(request, "organizer/detail.html", {"watchparty": watchparty, "search": full})
 
 
 
-class MovieIMDB(generic.ListView):
-    model = ListOfMovies
-    template_name = 'organizer/listOfMovies.html'
-    movie = ""
-    whatever = []
-    #for i in ListOfMovies.objects.values_list('x'):
-    #    movie = i[0]
-    lastMovieID = int(MovieSearcher.objects.last().id)
-    movie = MovieSearcher.objects.get(pk=lastMovieID).search
-    #movie = MovieSearcher.objects.last().search
+def MovieIMDB(request):
+    searchResults = []
+    if request.method == 'GET':
+        searchTerm = request.GET['search_box']
+    #lastMovieID = int(MovieSearcher.objects.last().id)
+    #movie = MovieSearcher.objects.get(pk=lastMovieID).search
     ia = Cinemagoer()
-    realList = ia.search_movie(movie)
+    realList = ia.search_movie(searchTerm)
     for j in range(len(realList)):
-        whatever.append(realList[j]["title"])
-    extra_context = {'xy': whatever}
-
-#    def post(self, request):
- #       myVar = request.POST.get("movies")
-  #      s = MovieSearcher.objects.last()
-   #     s.search = myVar
-    #    s.save()
-     #   return redirect("/watchparties")
+        searchResults.append(realList[j]["title"])
+    return render(request, "organizer/listOfMovies.html", {"searchResults": searchResults})
 
 
 def GetParty(request):
