@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>Search Movie:</h2>
+    <form method = "post">
+        <table>
+            {{ form }}
+        </table>
+        {% csrf_token %}
+        <button type = "submit" class = "btn btn-dark"> Search</button>
+    </form>
+    {{check}}
+</body>
+</html>

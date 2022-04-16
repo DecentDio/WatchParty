@@ -1,7 +1,6 @@
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
     <h1>Start Date: {{ watchparty.start_date}}</h1>
     <h1>End Date: {{ watchparty.end_date}}</h1>
     <h1>Added Users:</h1>
@@ -12,4 +11,14 @@
     {% for range in watchparty.availabilityrange_set.all %}
         for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
     {% endfor %}
+    <h1>Movies</h1>
+    <br>
+    {% for key, value in search.items %}
+        {% if watchparty.title_text == key.0|stringformat:"s" %}
+            "{{key.1}}" has {{value}} votes <br>
+        {% endif %}
+    {% endfor %}
+
+    <h1>Add more movies</h1>
+    <a href = "{% url 'organizer:movies' %}" > Add a movie </a>
 </fieldset>
