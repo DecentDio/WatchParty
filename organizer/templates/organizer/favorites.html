@@ -7,16 +7,23 @@
 </head>
 <body>
     <h1> My Favorites</h1>
-    {% for key,val in favorites.items %}
-        {{ key.movie }}
-        {% if val|length > 0 %}
-            ----- Also Favorited By:
-            {% for sameTaster in val %}
-                {{ sameTaster.account }},
-            {% endfor %}
-        {% endif %}
-        <br>
-    {% endfor %}
+    <form method="POST" action = "{% url 'organizer:rmFav' %}" >
+        {% csrf_token %}
+        {% for key,val in favorites.items %}
+            <input type="radio" id="{{ key.movie }}" name="movie" value="{{ key.movie }}">
+            <label for="{{ key.movie }}"> "{{key.movie}}"</label>
+            {% if val|length > 0 %}
+                ----- Also Favorited By:
+                {% for sameTaster in val %}
+                    {{ sameTaster.account }},
+                {% endfor %}
+            {% endif %}
+            <br>
+        {% endfor %}
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Remove Favorite </button>
+    </form>
+
     <h1>Add more favorite movies</h1>
 
     <!-- ADD VIA MANUAL INPUT -->

@@ -174,6 +174,13 @@ def addFavorite(request):
     fm.save()
     return HttpResponseRedirect(reverse('organizer:favorites'))
 
+def rmFavorite(request):
+    movie = request.POST['movie']
+    user = User.objects.get(pk=request.POST['userID'])
+    if FavoriteMovie.objects.filter(account=user, movie=movie).exists():
+        FavoriteMovie.objects.filter(account=user, movie=movie).delete()
+    return HttpResponseRedirect(reverse('organizer:favorites'))
+
 def GetComment(request):
     watchpartyID = request.POST['watchpartyID']
     userID = request.POST['userID']
