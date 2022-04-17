@@ -165,7 +165,15 @@
         {% endif %}
         </fieldset>
     {% endfor %}
-
+<!-- LEAVE WATCHPARTY -->
+{% if watchparty.account.username != user.username %}
+    <form method="POST" action="{% url 'organizer:kickUser' %}">
+        {% csrf_token %}
+        <input type="hidden" name="kickedUserID" value = "{{ user.id }}">
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <button type = "submit" > Leave WatchParty </button>
+    </form>
+{% endif %}
 <!-- IF NOT AN ALLOWED USER, NO PERMS -->
 {% else %}
     <h1> No Permissions to View this Watchparty </h1>
