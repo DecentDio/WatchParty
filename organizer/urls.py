@@ -12,5 +12,6 @@ urlpatterns = [
     path('addMovie', views.addMovie, name='addMovie'),
     path('addUser', views.addUser, name='addUser'),
     path('<int:pk>/', views.DetailView, name='detail'),
-    path('kickUser', views.kickUser, name='kickUser')
+    path('kickUser', views.kickUser, name='kickUser'),
+    path('getComment', views.GetComment, name='getComment')
 ]

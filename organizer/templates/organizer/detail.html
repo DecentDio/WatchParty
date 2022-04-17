@@ -94,5 +94,20 @@
     </form>
     {% endif %}
 </fieldset>
+<h2>Add a Comment:</h2>
+    <form method="POST" action = "{% url 'organizer:getComment' %}" >
+        {% csrf_token %}
+        <input id="comment" type="text" name="comment" placeholder="Type your comment here" >
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add Comment </button>
+    </form>
+<h2>Comments:</h2>
+    {% for c in comments %}
+        {{ c.account }} : {{ c.text }}
+        {{ c.pub_date }}
+        <br>
+    {% endfor %}
+
 {% endif %}
 
