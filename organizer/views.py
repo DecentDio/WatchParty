@@ -74,12 +74,13 @@ def GetParty(request):
 def GetAvil(request):
     if request.method == "POST":
         form = CreateAvailabilityRange(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("/watchparties")
+        form.instance.account = User.objects.get(pk=request.POST['userID'])
+        form.instance.watchparty = Watchparty.objects.get(pk=request.POST['watchpartyID'])
+        form.save()
+        return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
     else:
         form = CreateAvailabilityRange()
-    return render(request, "organizer/avilPost.html", {"form": form})
+    return render(request, "organizer/avilPost.html", {"form": form, "watchpartyID": request.GET['watchpartyID'], "userID": request.GET['userID']})
 
 
 def addUser(request):

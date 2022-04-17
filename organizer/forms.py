@@ -28,6 +28,7 @@ class CreateAvailabilityRange(ModelForm):
             'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%H:%M'),
             'end_time': DateInput(attrs={'type': 'datetime-local'}, format='%H:%M')
         }
+        exclude = ['account', 'watchparty']
 
 
 class CreateMovieSearch(ModelForm):

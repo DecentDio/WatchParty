@@ -25,6 +25,11 @@
         for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
         <br>
     {% endfor %}
+    <form method="GET" action = "{% url 'organizer:addAvil' %}" >
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add an Availability Range </button>
+    </form>
     <h1>Movies</h1>
     <br>
     <form method="POST" action = "{% url 'organizer:addMovie' %}" >

@@ -41,6 +41,13 @@ class MovieSearcher(models.Model):
 class ListOfMovies(models.Model):
     x = models.CharField(max_length=100)
 
-class Like(models.Model):
+class FavoriteMovie(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.CharField(max_length=200)
+
+class Comment(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
+    text = models.CharField(max_length=100)
+    pub_date = models.DateTimeField('date published')
+
