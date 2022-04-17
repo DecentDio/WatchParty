@@ -123,6 +123,14 @@ def GetAvil(request):
     return render(request, "organizer/avilPost.html",
                   {"form": form, "watchpartyID": request.GET['watchpartyID'], "userID": request.GET['userID']})
 
+def rmAvilRange(request):
+    watchpartyID = request.POST['watchpartyID']
+    if 'avilRangeID' not in request.POST:
+        messages.add_message(request, messages.ERROR, 'Error: No Availability Range Selected!')
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+    avilRange = AvailabilityRange.objects.get(pk=request.POST['avilRangeID'])
+    avilRange.delete()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
 def addUser(request):
     watchpartyID = request.POST['watchpartyID']

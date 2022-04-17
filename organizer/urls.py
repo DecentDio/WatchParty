@@ -18,5 +18,6 @@ urlpatterns = [
     path('deleteWatchParties', views.deleteWatchParty, name='deleteWatchParty'),
     path('favorites', views.favoritesView, name='favorites'),
     path('addFav', views.addFavorite, name='addFav'),
-    path('rmFav', views.rmFavorite, name='rmFav')
+    path('rmFav', views.rmFavorite, name='rmFav'),
+    path('rmAvilRange', views.rmAvilRange, name='rmAvilRange')
 ]
