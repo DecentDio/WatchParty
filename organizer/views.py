@@ -105,7 +105,7 @@ def kickUser(request):
     userID = request.POST['kickedUserID']
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
-    if watchparty.account is user:
+    if watchparty.account.username == user.username:
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     # MODELS TO SEARCH FOR OBJECTS TO DELETE:
     # AddedUser, AvailabilityRange, MovieSearcher, Comment,
