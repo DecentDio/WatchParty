@@ -32,7 +32,7 @@ class AvailabilityRange(models.Model):
     def valid_time_range(self):
         if self.end_time <= self.start_time:
             return False
-        if self.watchparty.start_date > self.start_time or self.watchparty.end_date < self.end_time:
+        if self.watchparty.start_date.strftime('%Y-%m-%d') > self.start_time.strftime('%Y-%m-%d') or self.watchparty.end_date.strftime('%Y-%m-%d') < self.end_time.strftime('%Y-%m-%d'):
             return False
         return True
     def __str__(self):

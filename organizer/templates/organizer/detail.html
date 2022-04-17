@@ -3,7 +3,15 @@
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
     <h3> Watchparty Creator: {{ watchparty.account }} </h3>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <!-- {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <!-- WATCH PARTY INHERENT INFO -->
     <h1>Start Date: {{ watchparty.start_date}}</h1>
@@ -116,6 +124,20 @@
         <button type = "submit" > Add Movie </button>
     </form>
     {% endif %}
+
+    <!-- ADD FROM YOUR FAVORITES -->
+    <h2>Add From Your Favorites: </h2>
+    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+        {% csrf_token %}
+        {% for fav in user.favoritemovie_set.all %}
+                <input type="radio" id="fav{{ fav.movie }}" name="movies" value="{{ fav.movie }}">
+                <label for="fav{{ fav.movie }}"> {{fav.movie}} </label><br>
+        {% endfor %}
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add Movie </button>
+    </form>
+
 </fieldset>
 
 <!-- ADD A NEW COMMENT -->
