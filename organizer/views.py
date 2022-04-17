@@ -22,12 +22,6 @@ def logout_view(request):
 
 
 def WatchParties(request):
-   # template_name = 'organizer/watchparties.html'
-   # context_object_name = 'watchparties_list'
-
-   #def get_queryset(self):
-   #     return Watchparty.objects.order_by('title_text')
-    
     invitedWatchParties = []
     for party in AddedUser.objects.filter(account=request.user):
         invitedWatchParties.append(party.watchparty)
@@ -43,8 +37,8 @@ def DetailView(request, pk):
         for j in range(len(realList)):
             searchResults.append(realList[j]["title"])
     return render(request, "organizer/detail.html",
-                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("pub_date"), "users": User.objects.all(), "search": getMovieVotes(),
-                   "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
+                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
+                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
 
 
 def getAllowedUsers(watchparty):
@@ -54,6 +48,11 @@ def getAllowedUsers(watchparty):
         allowedUsers.append(user.account)
     return allowedUsers
 
+def getUsersVotes(user):
+    usersVotes = []
+    for movieVote in MovieSearcher.objects.filter(account=user):
+        usersVotes.append(movieVote.search)
+    return usersVotes
 
 def getMovieVotes():
     full = {}
@@ -94,6 +93,8 @@ def addUser(request):
     userID = request.POST['userID']
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
+    if watchparty.account.username == user.username:
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     if AddedUser.objects.filter(account=user, watchparty=watchparty).exists():
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     au = AddedUser(account=user, watchparty=watchparty)
@@ -106,7 +107,7 @@ def kickUser(request):
     userID = request.POST['kickedUserID']
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
-    if watchparty.account is user:
+    if watchparty.account.username == user.username:
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     # MODELS TO SEARCH FOR OBJECTS TO DELETE:
     # AddedUser, AvailabilityRange, MovieSearcher, Comment,
@@ -116,7 +117,10 @@ def kickUser(request):
     Comment.objects.filter(account=user, watchparty=watchparty).delete()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
-
+def deleteWatchParty(request):
+    watchpartyID = request.POST['deletedID']
+    Watchparty.objects.get(pk=watchpartyID).delete()
+    return HttpResponseRedirect(reverse('organizer:watchparties'))
 def addMovie(request):
     watchpartyID = request.POST['watchpartyID']
     userID = request.POST['userID']
@@ -124,15 +128,23 @@ def addMovie(request):
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     if 'movies' not in request.POST:
         return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                         "allowedUsers": getAllowedUsers(watchparty),
+                                                         "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),
                                                          "search": getMovieVotes(),
                                                          "error_message": "Error: No movie selected!"})
 
     movie = request.POST['movies']
-
+    if 'rmVote' in request.POST:
+        if not MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
+            return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
+                                                             "userVotes": getUsersVotes(request.user),
+                                                             "allowedUsers": getAllowedUsers(watchparty),
+                                                             "search": getMovieVotes(),
+                                                             "error_message": "Error: You didn't vote for this!"})
+        MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).delete()
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     if MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
         return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                         "allowedUsers": getAllowedUsers(watchparty),
+                                                         "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),
                                                          "search": getMovieVotes(),
                                                          "error_message": "Error: You already voted for this!"})
     m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
@@ -151,4 +163,10 @@ def GetComment(request):
     time = datetime.datetime.now()
     c = Comment(account=user, watchparty=watchparty, text=comment, pub_date=time)
     c.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
+def deleteComment(request):
+    comment = Comment.objects.get(pk = request.POST['commentID'])
+    watchpartyID = comment.watchparty.id
+    comment.delete()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))

@@ -19,6 +19,8 @@ class Watchparty(models.Model):
 class AddedUser(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.account.username + " in " + self.watchparty.title_text
 
 
 class AvailabilityRange(models.Model):
@@ -33,12 +35,17 @@ class AvailabilityRange(models.Model):
         if self.watchparty.start_date > self.start_time or self.watchparty.end_date < self.end_time:
             return False
         return True
+    def __str__(self):
+        return self.account.username + "'s range for " + self.watchparty.title_text
 
 
 class MovieSearcher(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
     search = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.account.username + " votes for " + self.search + " in " + self.watchparty.title_text
 
 
 class ListOfMovies(models.Model):
@@ -55,3 +62,5 @@ class Comment(models.Model):
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
     text = models.CharField(max_length=10000)
     pub_date = models.DateTimeField('date published')
+    def __str__(self):
+        return self.account.username + "'s comment in " + self.watchparty.title_text + " on " + self.pub_date
