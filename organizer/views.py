@@ -27,19 +27,25 @@ def WatchParties(request):
         invitedWatchParties.append(party.watchparty)
     return render(request,'organizer/watchparties.html',{"watchparties_list":Watchparty.objects.order_by('title_text'), "invitedWatchParties":invitedWatchParties})
 
+def favoritesView(request):
+    return render(request, 'organizer/favorites.html', {})
+
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
     searchResults = []
     if "search_box" in request.GET:
-        searchTerm = request.GET['search_box']
-        ia = Cinemagoer()
-        realList = ia.search_movie(searchTerm)
-        for j in range(len(realList)):
-            searchResults.append(realList[j]["title"])
+        searchResults = searchMovie(request.GET['search_box'])
     return render(request, "organizer/detail.html",
                   {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
                    "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
 
+def searchMovie(searchTerm):
+    ia = Cinemagoer()
+    searchResultsObjects = ia.search_movie(searchTerm)
+    searchResults = []
+    for i in range(len(searchResultsObjects)):
+        searchResults.append(searchResultsObjects[i]["title"])
+    return searchResults
 
 def getAllowedUsers(watchparty):
     allowedUsers = []
@@ -121,6 +127,7 @@ def deleteWatchParty(request):
     watchpartyID = request.POST['deletedID']
     Watchparty.objects.get(pk=watchpartyID).delete()
     return HttpResponseRedirect(reverse('organizer:watchparties'))
+
 def addMovie(request):
     watchpartyID = request.POST['watchpartyID']
     userID = request.POST['userID']
@@ -150,7 +157,6 @@ def addMovie(request):
     m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
     m.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
-
 
 def GetComment(request):
     watchpartyID = request.POST['watchpartyID']

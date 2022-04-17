@@ -1,19 +1,21 @@
+<!-- CHECK IF USER IS ALLOWED TO VIEW THIS PAGE -->
 {% if user in allowedUsers %}
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
     <h3> Watchparty Creator: {{ watchparty.account }} </h3>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <!-- WATCH PARTY INHERENT INFO -->
     <h1>Start Date: {{ watchparty.start_date}}</h1>
     <h1>End Date: {{ watchparty.end_date}}</h1>
 
-
+    <!-- LIST OF ADDED USERS -->
     <h1>Added Users:</h1>
     {% for account in watchparty.addeduser_set.all %}
         {{ account.account }},
     {% endfor %}
 
-
-
+    <!-- INVITE NEW USERS -->
     <h2>Invite User:</h2>
     <form method="POST" action="{% url 'organizer:addUser' %}">
         {% csrf_token %}
@@ -26,6 +28,7 @@
         <button type = "submit" > Add User </button>
     </form>
 
+    <!-- KICK USERS IF YOU ARE OWNER -->
     {% if user == watchparty.account %}
     <h2>Kick User:</h2>
     <form method="POST" action="{% url 'organizer:kickUser' %}">
@@ -40,7 +43,7 @@
     </form>
     {% endif %}
 
-
+    <!-- SHOW USER'S AVAILABILITY RANGES -->
     <h1>Availability Ranges:</h1>
     {% for range in watchparty.availabilityrange_set.all %}
         for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
@@ -52,6 +55,7 @@
         <button type = "submit" > Add an Availability Range </button>
     </form>
 
+    <!-- VOTE FOR AN EXISTING MOVIE -->
     <h1>Vote for a Movie to Watch: </h1>
     <form method="POST" action = "{% url 'organizer:addMovie' %}" >
         {% csrf_token %}
@@ -71,8 +75,10 @@
         <button type = "submit" name = "rmVote"> Remove Vote </button>
     </form>
 
+    <!-- ADD MORE MOVIES -->
     <h1>Add more movies</h1>
 
+    <!-- ADD VIA MANUAL INPUT -->
     <h2>Manually add Movie:</h2>
     <form method="POST" action = "{% url 'organizer:addMovie' %}" >
         {% csrf_token %}
@@ -82,6 +88,7 @@
         <button type = "submit" > Add Movie </button>
     </form>
 
+    <!-- ADD VIA SEARCHING -->
     <h2>Search for a movie:</h2>
     <form type="get" action=".">
         <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
@@ -101,6 +108,8 @@
     </form>
     {% endif %}
 </fieldset>
+
+<!-- ADD A NEW COMMENT -->
 <h2>Add a Comment:</h2>
     <form method="POST" action = "{% url 'organizer:getComment' %}" >
         {% csrf_token %}
@@ -110,6 +119,8 @@
         <input type="hidden" name="userID" value = "{{ user.id }}">
         <button type = "submit" > Add Comment </button>
     </form>
+
+<!-- VIEW COMMENTS, ABLE TO DELETE YOUR OWN -->
 <h2>Comments:</h2>
     {% for c in comments %}
         <fieldset>
@@ -124,6 +135,7 @@
         </fieldset>
     {% endfor %}
 
+<!-- IF NOT AN ALLOWED USER, NO PERMS -->
 {% else %}
     <h1> No Permissions to View this Watchparty </h1>
 {% endif %}
