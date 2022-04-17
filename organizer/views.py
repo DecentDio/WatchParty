@@ -112,7 +112,9 @@ def GetAvil(request):
         form = CreateAvailabilityRange(request.POST)
         form.instance.account = User.objects.get(pk=request.POST['userID'])
         form.instance.watchparty = Watchparty.objects.get(pk=request.POST['watchpartyID'])
-        form.save()
+        obj = form.save(commit=False)
+        if obj.valid_time_range():
+            obj.save()
         return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
     else:
         form = CreateAvailabilityRange()
