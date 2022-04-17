@@ -36,15 +36,17 @@ def DetailView(request, pk):
         realList = ia.search_movie(searchTerm)
         for j in range(len(realList)):
             searchResults.append(realList[j]["title"])
+    full = getMovieVotes()
+    return render(request, "organizer/detail.html", {"watchparty": watchparty, "search": full, "searchResults": searchResults})
 
+def getMovieVotes():
+    full = {}
     for movieVote in MovieSearcher.objects.all():
         if (movieVote.watchparty, movieVote.search) in full.keys():
             full[(movieVote.watchparty, movieVote.search)] += 1
         else:
             full[(movieVote.watchparty, movieVote.search)] = 1
-    return render(request, "organizer/detail.html", {"watchparty": watchparty, "search": full, "searchResults": searchResults})
-
-
+    return full
 
 def MovieIMDB(request):
     searchResults = []
@@ -107,6 +109,10 @@ def addMovie(request):
     watchpartyID = request.POST['watchpartyID']
     userID = request.POST['userID']
     movie = request.POST['movies']
-    m = MovieSearcher(account=User.objects.get(pk=userID), watchparty=Watchparty.objects.get(pk=watchpartyID), search=movie)
+    user = User.objects.get(pk=userID)
+    watchparty = Watchparty.objects.get(pk=watchpartyID)
+    if MovieSearcher.objects.filter(account = user, watchparty = watchparty, search = movie).exists():
+        return render(request, "organizer/detail.html", {"watchparty": watchparty, "search": getMovieVotes(), "error_message": "Error: You already voted for this!"})
+    m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
     m.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
