@@ -76,10 +76,10 @@
     </form>
 
     <!-- Show the optimal range of times to have a watch party-->
-    <h1> Optimal Range of Times</h1> 
-    {% if optimalRange|length > 0 %}
-    Optimal Start Time for Watchparty: {{ optimalRange.0 }} <br>
-    Optimal End Time for Watchparty: {{ optimalRange.1 }}
+    <h1> Shared Availability Range</h1>
+    {% if sharedRange|length > 0 %}
+    Start Time: {{ sharedRange.0 }} <br>
+    End Time: {{ sharedRange.1 }}
 
     {% endif %}
 

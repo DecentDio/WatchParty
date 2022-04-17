@@ -26,7 +26,7 @@ def WatchParties(request):
     invitedWatchParties = []
     for party in AddedUser.objects.filter(account=request.user):
         invitedWatchParties.append(party.watchparty)
-    return render(request,'organizer/watchparties.html',{"watchparties_list":Watchparty.objects.order_by('title_text'), "invitedWatchParties":invitedWatchParties})
+    return render(request,'organizer/watchparties.html',{"watchparties_list": Watchparty.objects.order_by('title_text'), "invitedWatchParties": invitedWatchParties})
 
 def favoritesView(request):
     favorites = dict.fromkeys(FavoriteMovie.objects.filter(account=request.user))
@@ -40,19 +40,19 @@ def favoritesView(request):
 
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
-    optimalRangesTime = []
-    for range in AvailabilityRange.objects.filter(watchparty = watchparty, account = request.user):
-        optimalRangesTime.append((range.start_time,range.end_time))
+    sharedRangesTime = []
+    for range in AvailabilityRange.objects.filter(watchparty = watchparty):
+        sharedRangesTime.append((range.start_time,range.end_time))
 
     startAndEndRange = []
 
-    if len(optimalRangesTime) > 0:
-        defaultStartTime = optimalRangesTime[0][0]
-        defaultEndTime = optimalRangesTime[0][1]
-        for i in optimalRangesTime:
+    if len(sharedRangesTime) > 0:
+        defaultStartTime = sharedRangesTime[0][0]
+        defaultEndTime = sharedRangesTime[0][1]
+        for i in sharedRangesTime:
             if i[0] > defaultStartTime:
                 defaultStartTime = i[0]
-            if i[1] > defaultEndTime:
+            if i[1] < defaultEndTime:
                 defaultEndTime = i[1]
         startAndEndRange.append(defaultStartTime)
         startAndEndRange.append(defaultEndTime)
@@ -63,7 +63,7 @@ def DetailView(request, pk):
 
     return render(request, "organizer/detail.html",
                   {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
-                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "optimalRange":startAndEndRange})
+                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "sharedRange":startAndEndRange})
 
 def searchMovie(searchTerm):
     ia = Cinemagoer()
