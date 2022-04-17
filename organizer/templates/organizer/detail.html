@@ -1,5 +1,7 @@
+{% if user in allowedUsers %}
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
+    <h3>Watchparty Creator: {{ watchparty.account }} </h3>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <h1>Start Date: {{ watchparty.start_date}}</h1>
     <h1>End Date: {{ watchparty.end_date}}</h1>
@@ -7,9 +9,21 @@
     {% for account in watchparty.addeduser_set.all %}
         {{ account.account }}
     {% endfor %}
+    <h2>Invite User:</h2>
+    <form method="POST" action="{% url 'organizer:addUser' %}">
+        {% csrf_token %}
+        <select name="userID" id="userID">
+            {% for user in users %}
+                <option value="{{user.id}}">{{user.username}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <button type = "submit" > Add User </button>
+    </form>
     <h1>Availability Ranges:</h1>
     {% for range in watchparty.availabilityrange_set.all %}
         for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
+        <br>
     {% endfor %}
     <h1>Movies</h1>
     <br>
@@ -26,8 +40,8 @@
         <input type="hidden" name="userID" value = "{{ user.id }}">
         <button type = "submit" > Vote! </button>
     </form>
-
     <h1>Add more movies</h1>
+
     <h2>Manually add Movie:</h2>
     <form method="POST" action = "{% url 'organizer:addMovie' %}" >
         {% csrf_token %}
@@ -55,5 +69,5 @@
         <button type = "submit" > Add Movie </button>
     </form>
     {% endif %}
-
 </fieldset>
+{% endif %}

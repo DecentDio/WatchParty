@@ -7,6 +7,7 @@
 <body>
     <h2>Enter your watch party details:</h2>
     <form method = "post">
+        <input type="hidden" name="account" value = "{{ user }}">
         <table>
             {{ form }}
         </table>

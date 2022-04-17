@@ -8,9 +8,10 @@ class CreateWatchParty(ModelForm):
         fields = "__all__"
         widgets = {
             'Title': Textarea(),
-            'Start Date(YYYY-MM-DD)': Textarea(),
-            'End Date (YYYY-MM-DD': Textarea()
+            'start_date': DateInput(attrs={'type': 'date'}),
+            'end_date': DateInput(attrs={'type': 'date'})
         }
+        exclude = ['account']
 
 
 class CreateAddedUser(ModelForm):
