@@ -128,7 +128,15 @@ def addMovie(request):
                                                          "error_message": "Error: No movie selected!"})
 
     movie = request.POST['movies']
-
+    if 'rmVote' in request.POST:
+        if not MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
+            return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
+                                                             "userVotes": getUsersVotes(request.user),
+                                                             "allowedUsers": getAllowedUsers(watchparty),
+                                                             "search": getMovieVotes(),
+                                                             "error_message": "Error: You didn't vote for this!"})
+        MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).delete()
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     if MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
         return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
                                                          "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),

@@ -67,7 +67,8 @@
         {% endfor %}
         <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
         <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Vote! </button>
+        <button type = "submit" name = "vote"> Vote! </button>
+        <button type = "submit" name = "rmVote"> Remove Vote </button>
     </form>
 
     <h1>Add more movies</h1>
