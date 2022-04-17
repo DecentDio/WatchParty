@@ -1,9 +1,9 @@
 from imdb import Cinemagoer
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
-from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch
+from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser
+from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
@@ -80,7 +80,8 @@ def GetAvil(request):
         return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
     else:
         form = CreateAvailabilityRange()
-    return render(request, "organizer/avilPost.html", {"form": form, "watchpartyID": request.GET['watchpartyID'], "userID": request.GET['userID']})
+    return render(request, "organizer/avilPost.html",
+                  {"form": form, "watchpartyID": request.GET['watchpartyID'], "userID": request.GET['userID']})
 
 
 def addUser(request):
@@ -92,6 +93,22 @@ def addUser(request):
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     au = AddedUser(account=user, watchparty=watchparty)
     au.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
+
+def kickUser(request):
+    watchpartyID = request.POST['watchpartyID']
+    userID = request.POST['kickedUserID']
+    user = User.objects.get(pk=userID)
+    watchparty = Watchparty.objects.get(pk=watchpartyID)
+    if watchparty.account is user:
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+    # MODELS TO SEARCH FOR OBJECTS TO DELETE:
+    # AddedUser, AvailabilityRange, MovieSearcher, Comment,
+    AddedUser.objects.filter(account=user, watchparty=watchparty).delete()
+    AvailabilityRange.objects.filter(account=user, watchparty=watchparty).delete()
+    MovieSearcher.objects.filter(account=user, watchparty=watchparty).delete()
+    Comment.objects.filter(account=user, watchparty=watchparty).delete()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
 
@@ -115,4 +132,16 @@ def addMovie(request):
                                                          "error_message": "Error: You already voted for this!"})
     m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
     m.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
+
+def GetComment(request):
+    watchpartyID = request.POST['watchpartyID']
+    userID = request.POST['userID']
+    user = User.objects.get(pk=userID)
+    watchparty = Watchparty.objects.get(pk=watchpartyID)
+    comment = request.POST['comment']
+    time = datetime.datetime.now()
+    c = Comment(account=user, watchparty=watchparty, text=comment, pub_date=time)
+    c.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))

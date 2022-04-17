@@ -15,6 +15,7 @@ class Watchparty(models.Model):
     def valid_date_range(self):
         return self.end_date >= self.start_date
 
+
 class AddedUser(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
@@ -33,21 +34,24 @@ class AvailabilityRange(models.Model):
             return False
         return True
 
+
 class MovieSearcher(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
     search = models.CharField(max_length=100)
 
+
 class ListOfMovies(models.Model):
     x = models.CharField(max_length=100)
+
 
 class FavoriteMovie(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.CharField(max_length=200)
 
+
 class Comment(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
+    text = models.CharField(max_length=10000)
     pub_date = models.DateTimeField('date published')
-

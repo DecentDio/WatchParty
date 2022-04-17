@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Textarea, DateInput
-from .models import Watchparty, AddedUser, AvailabilityRange, MovieSearcher
+from .models import Watchparty, AddedUser, AvailabilityRange, MovieSearcher, Comment
 
 
 class CreateWatchParty(ModelForm):
@@ -38,3 +38,12 @@ class CreateMovieSearch(ModelForm):
         widgets = {
             'Movie Title:': Textarea()
         }
+
+class CreateComment(ModelForm):
+    class Meta:
+        model = Comment
+        fields = "__all__"
+        widgets = {
+            'text': Textarea()
+        }
+        exclude = ['account', 'watchparty']
