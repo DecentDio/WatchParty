@@ -9,6 +9,7 @@ from django.utils import timezone
 from collections import Counter
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+import datetime
 
 
 def login(request):
@@ -38,7 +39,7 @@ def DetailView(request, pk):
         for j in range(len(realList)):
             searchResults.append(realList[j]["title"])
     return render(request, "organizer/detail.html",
-                  {"watchparty": watchparty, "users": User.objects.all(), "search": getMovieVotes(),
+                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("pub_date"), "users": User.objects.all(), "search": getMovieVotes(),
                    "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
 
 
@@ -141,6 +142,8 @@ def GetComment(request):
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     comment = request.POST['comment']
+    if comment == '':
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     time = datetime.datetime.now()
     c = Comment(account=user, watchparty=watchparty, text=comment, pub_date=time)
     c.save()
