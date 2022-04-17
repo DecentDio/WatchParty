@@ -22,37 +22,40 @@
         <div class="logo"> Welcome, {{ user.username }}! </div>
         <!-- NAVIGATION MENU -->
         <ul class="nav-links">
-        <!-- USING CHECKBOX HACK -->
-        <input type="checkbox" id="checkbox_toggle" />
-        <label for="checkbox_toggle" class="hamburger">&#9776;</label>
         <!-- NAVIGATION MENUS -->
         <div class="menu">
         <li><a href="/">Home</a></li>
-        <li><a href="/">Watch parties</a></li>
         <li class="services">
-        <a href="/">Services</a>
+        <a href="/">Watchparty</a>
         <!-- DROPDOWN MENU -->
         <ul class="dropdown">
-        <li><a href="/">Dropdown 1 </a></li>
-        <li><a href="/">Dropdown 2</a></li>
-        <li><a href="/">Dropdown 2</a></li>
-        <li><a href="/">Dropdown 3</a></li>
-        <li><a href="/">Dropdown 4</a></li>
+        <li><a href="{% url 'organizer:watchparties' %}"> Your parties </a></li>
+        <li><a href="{% url 'organizer:favorites' %}"> Favorites </a></li>
+        <li><a href="{% url 'organizer:form' %}">Create Party</a></li>
+        <!-- <li><a href="/">Dropdown 3</a></li> -->
+        <!-- <li><a href="/">Dropdown 4</a></li> -->
         </ul>
         </li>
-        <li><a href="/">Pricing</a></li>
-        <li><a href="/">Logout</a></li>
+        <li class = "services">
+            <a href="/">My account</a>
+        <!-- DROPDOWN MENU -->
+        <ul class="dropdown">
+        <li><a href="{% url 'organizer:logout' %}"> Logout </a></li>
+        
+
+        </ul>
+        </li>
+
         </div>
         </ul>
     </nav>
 
-
-        <p>Welcome, {{ user.username }}!</p>
-        <a href="{% url 'organizer:watchparties' %}">My WatchParties</a>
-        <br>
-        <a href="{% url 'organizer:favorites' %}">My Favorites</a>
-        <br>
-        <a href="{% url 'organizer:logout' %}">Logout</a>
+        <!-- <p>Welcome, {{ user.username }}!</p> -->
+        <!-- <a href="{% url 'organizer:watchparties' %}">My WatchParties</a> -->
+        <!-- <br> -->
+        <!--<a href="{% url 'organizer:favorites' %}">My Favorites</a> -->
+        <!--<br> -->
+        <!-- <a href="{% url 'organizer:logout' %}">Logout</a> -->
     {% else %}
     <!-- <h1>Watch Party Organizer</h1> this is a bug--> 
     <a href="{% provider_login_url 'google' %}">Login with Google</a>
