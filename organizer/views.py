@@ -37,8 +37,8 @@ def DetailView(request, pk):
         for j in range(len(realList)):
             searchResults.append(realList[j]["title"])
     return render(request, "organizer/detail.html",
-                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "search": getMovieVotes(),
-                   "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
+                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
+                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
 
 
 def getAllowedUsers(watchparty):
@@ -48,6 +48,11 @@ def getAllowedUsers(watchparty):
         allowedUsers.append(user.account)
     return allowedUsers
 
+def getUsersVotes(user):
+    usersVotes = []
+    for movieVote in MovieSearcher.objects.filter(account=user):
+        usersVotes.append(movieVote.search)
+    return usersVotes
 
 def getMovieVotes():
     full = {}
@@ -118,7 +123,7 @@ def addMovie(request):
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     if 'movies' not in request.POST:
         return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                         "allowedUsers": getAllowedUsers(watchparty),
+                                                         "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),
                                                          "search": getMovieVotes(),
                                                          "error_message": "Error: No movie selected!"})
 
@@ -126,7 +131,7 @@ def addMovie(request):
 
     if MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
         return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                         "allowedUsers": getAllowedUsers(watchparty),
+                                                         "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),
                                                          "search": getMovieVotes(),
                                                          "error_message": "Error: You already voted for this!"})
     m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
