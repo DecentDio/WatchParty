@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange
+from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
@@ -28,7 +28,11 @@ def WatchParties(request):
     return render(request,'organizer/watchparties.html',{"watchparties_list":Watchparty.objects.order_by('title_text'), "invitedWatchParties":invitedWatchParties})
 
 def favoritesView(request):
-    return render(request, 'organizer/favorites.html', {})
+    favorites = dict.fromkeys(FavoriteMovie.objects.filter(account=request.user))
+    for movie in favorites.keys():
+        sameTaste = FavoriteMovie.objects.filter(movie=movie).exclude(account=request.user)
+        favorites[movie] = sameTaste
+    return render(request, 'organizer/favorites.html', {"favorites": favorites})
 
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)

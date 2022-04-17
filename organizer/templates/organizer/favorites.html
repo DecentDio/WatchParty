@@ -7,5 +7,15 @@
 </head>
 <body>
     <h1> My Favorites</h1>
+    {% for key,val in favorites.items %}
+        {{ key.movie }}
+        {% if val|length > 0 %}
+            ----- Also Favorited By:
+            {% for sameTaster in val %}
+                {{ sameTaster.account }},
+            {% endfor %}
+        {% endif %}
+        <br>
+    {% endfor %}
 </body>
 </html>

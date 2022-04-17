@@ -55,7 +55,8 @@ class ListOfMovies(models.Model):
 class FavoriteMovie(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.CharField(max_length=200)
-
+    def __str__(self):
+        return self.movie
 
 class Comment(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
