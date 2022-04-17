@@ -50,6 +50,8 @@
         <p>Welcome, {{ user.username }}!</p>
         <a href="{% url 'organizer:watchparties' %}">My WatchParties</a>
         <br>
+        <a href="{% url 'organizer:favorites' %}">My Favorites</a>
+        <br>
         <a href="{% url 'organizer:logout' %}">Logout</a>
     {% else %}
     <!-- <h1>Watch Party Organizer</h1> this is a bug--> 

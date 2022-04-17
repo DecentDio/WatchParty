@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load socialaccount %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <h1 class = "text-center"> {{user}}'s List of Favorited Movies</h1>
+</head>
+<body>
+    <h1> My Favorites</h1>
+    <form method="POST" action = "{% url 'organizer:rmFav' %}" >
+        {% csrf_token %}
+        {% for key,val in favorites.items %}
+            <input type="radio" id="{{ key.movie }}" name="movie" value="{{ key.movie }}">
+            <label for="{{ key.movie }}"> "{{key.movie}}"</label>
+            {% if val|length > 0 %}
+                ----- Also Favorited By:
+                {% for sameTaster in val %}
+                    {{ sameTaster.account }},
+                {% endfor %}
+            {% endif %}
+            <br>
+        {% endfor %}
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Remove Favorite </button>
+    </form>
+
+    <h1>Add more favorite movies</h1>
+
+    <!-- ADD VIA MANUAL INPUT -->
+    <h2>Manually Add:</h2>
+
+    <form method="POST" action = "{% url 'organizer:addFav' %}" >
+        {% csrf_token %}
+        <input id="movies" type="text" name="movie" placeholder="Manually add Movie" >
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add Movie </button>
+    </form>
+
+    <!-- ADD VIA SEARCHING -->
+    <h2>Search:</h2>
+    <form method="GET" action="{% url 'organizer:favorites' %}">
+        <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+        <button id= "search_submit" type ="submit" >Search</button>
+    </form>
+
+    {% if searchResults|length > 1 %}
+    <form method="POST" action = "{% url 'organizer:addFav' %}" >
+        {% csrf_token %}
+        {% for range in searchResults %}
+            <input type="radio" id="{{range}}" name="movie" value="{{range}}">
+            <label for="{{range}}"> {{range}} </label><br>
+        {% endfor %}
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add Movie </button>
+    </form>
+    {% endif %}
+
+</body>
+</html>
