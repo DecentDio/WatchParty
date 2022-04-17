@@ -55,6 +55,15 @@
         <button type = "submit" > Add an Availability Range </button>
     </form>
 
+    <!-- Show the optimal range of times to have a watch party-->
+    <h1> Optimal Range of Times</h1> 
+    {% if optimalRange|length > 0 %}
+    Optimal Start Time for Watchparty: {{ optimalRange.0 }} <br>
+    Optimal End Time for Watchparty: {{ optimalRange.1 }}
+
+    {% endif %}
+
+
     <!-- VOTE FOR AN EXISTING MOVIE -->
     <h1>Vote for a Movie to Watch: </h1>
     <form method="POST" action = "{% url 'organizer:addMovie' %}" >

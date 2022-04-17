@@ -39,12 +39,31 @@ def favoritesView(request):
 
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
+    optimalRangesTime = []
+    for range in AvailabilityRange.objects.filter(watchparty = watchparty, account = request.user):
+        optimalRangesTime.append((range.start_time,range.end_time))
+
+    startAndEndRange = []
+
+    if len(optimalRangesTime) > 0:
+        defaultStartTime = optimalRangesTime[0][0]
+        defaultEndTime = optimalRangesTime[0][1]
+        for i in optimalRangesTime:
+            if i[0] > defaultStartTime:
+                defaultStartTime = i[0]
+            if i[1] > defaultEndTime:
+                defaultEndTime = i[1]
+        startAndEndRange.append(defaultStartTime)
+        startAndEndRange.append(defaultEndTime)
+        
+    
+
     searchResults = []
     if "search_box" in request.GET:
         searchResults = searchMovie(request.GET['search_box'])
     return render(request, "organizer/detail.html",
                   {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
-                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
+                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "optimalRange":startAndEndRange})
 
 def searchMovie(searchTerm):
     ia = Cinemagoer()
