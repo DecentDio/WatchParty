@@ -3,9 +3,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <h1 class = "text-center"> <{{user}}'s Watch Parties</h1>
+    <h1 class = "text-center"> {{user}}'s Watch Parties</h1>
 </head>
 <body>
+    <h1> My Watch parties</h1>
     {% if watchparties_list %}
         <ul class = "list-group">
         {% for watchparty in watchparties_list %}
@@ -17,6 +18,21 @@
     {% else %}
         <p>No watchparties are available.</p>
     {% endif %}
+
+
+    <h1 class = "text-center"> My Invited Parties</h1>
+    {% if invitedWatchParties %}
+    <ul class = "list-group">
+    {% for invitedParty in invitedWatchParties %}
+        {% if invitedParty.account == user  %}
+            <li class="list-group-item text-center"><a href="{% url 'organizer:detail' invitedParty.id %}">{{invitedParty.title_text }}</a>: {{invitedParty.start_date }} to {{invitedParty.end_date }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    {% else %}
+        <p>No invited parties are available.</p>
+    {% endif %}
+
     <a href = "{% url 'organizer:form' %}" > Create WatchParty </a>
 </body>
 </html>

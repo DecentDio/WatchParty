@@ -21,13 +21,17 @@ def logout_view(request):
     return render(request, 'organizer/login.html', {})
 
 
-class WatchParties(generic.ListView):
-    template_name = 'organizer/watchparties.html'
-    context_object_name = 'watchparties_list'
+def WatchParties(request):
+   # template_name = 'organizer/watchparties.html'
+   # context_object_name = 'watchparties_list'
 
-    def get_queryset(self):
-        return Watchparty.objects.order_by('title_text')
-
+   #def get_queryset(self):
+   #     return Watchparty.objects.order_by('title_text')
+    
+    invitedWatchParties = []
+    for party in AddedUser.objects.filter(account=request.user):
+        invitedWatchParties.append(party.watchparty)
+    return render(request,'organizer/watchparties.html',{"watchparties_list":Watchparty.objects.order_by('title_text'), "invitedWatchParties":invitedWatchParties})
 
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
