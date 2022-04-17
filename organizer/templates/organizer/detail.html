@@ -3,7 +3,15 @@
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
     <h3> Watchparty Creator: {{ watchparty.account }} </h3>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <!-- {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <!-- WATCH PARTY INHERENT INFO -->
     <h1>Start Date: {{ watchparty.start_date}}</h1>

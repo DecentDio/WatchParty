@@ -10,6 +10,7 @@ from collections import Counter
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 import datetime
+from django.contrib import messages
 
 
 def login(request):
@@ -55,12 +56,11 @@ def DetailView(request, pk):
                 defaultEndTime = i[1]
         startAndEndRange.append(defaultStartTime)
         startAndEndRange.append(defaultEndTime)
-        
-    
 
     searchResults = []
     if "search_box" in request.GET:
         searchResults = searchMovie(request.GET['search_box'])
+
     return render(request, "organizer/detail.html",
                   {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
                    "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "optimalRange":startAndEndRange})
@@ -115,6 +115,8 @@ def GetAvil(request):
         obj = form.save(commit=False)
         if obj.valid_time_range():
             obj.save()
+        else:
+            messages.add_message(request, messages.ERROR, 'Error: Availability Range Not Valid!')
         return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
     else:
         form = CreateAvailabilityRange()
@@ -128,8 +130,10 @@ def addUser(request):
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     if watchparty.account.username == user.username:
+        messages.add_message(request, messages.ERROR, "Error: User is the Owner!")
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     if AddedUser.objects.filter(account=user, watchparty=watchparty).exists():
+        messages.add_message(request, messages.ERROR, "Error: User already Added!")
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     au = AddedUser(account=user, watchparty=watchparty)
     au.save()
@@ -142,6 +146,7 @@ def kickUser(request):
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     if watchparty.account.username == user.username:
+        messages.add_message(request, messages.ERROR, "Error: You Tried to Kick the Owner!")
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     # MODELS TO SEARCH FOR OBJECTS TO DELETE:
     # AddedUser, AvailabilityRange, MovieSearcher, Comment,
@@ -162,26 +167,21 @@ def addMovie(request):
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     if 'movies' not in request.POST:
-        return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                         "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),
-                                                         "search": getMovieVotes(),
-                                                         "error_message": "Error: No movie selected!"})
+        messages.add_message(request, messages.ERROR, 'Error: No Movie Selected!')
+        return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
 
     movie = request.POST['movies']
     if 'rmVote' in request.POST:
         if not MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
-            return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                             "userVotes": getUsersVotes(request.user),
-                                                             "allowedUsers": getAllowedUsers(watchparty),
-                                                             "search": getMovieVotes(),
-                                                             "error_message": "Error: You didn't vote for this!"})
+            messages.add_message(request, messages.ERROR, "Error: You didn't vote for this!")
+            return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
+
         MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).delete()
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     if MovieSearcher.objects.filter(account=user, watchparty=watchparty, search=movie).exists():
-        return render(request, "organizer/detail.html", {"watchparty": watchparty, "users": User.objects.all(),
-                                                         "userVotes": getUsersVotes(request.user), "allowedUsers": getAllowedUsers(watchparty),
-                                                         "search": getMovieVotes(),
-                                                         "error_message": "Error: You already voted for this!"})
+        messages.add_message(request, messages.ERROR, "Error: You Already Voted for This!")
+        return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
+
     m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
     m.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
@@ -190,6 +190,7 @@ def addFavorite(request):
     movie = request.POST['movie']
     user = User.objects.get(pk=request.POST['userID'])
     if FavoriteMovie.objects.filter(account=user, movie=movie).exists():
+        messages.add_message(request, messages.ERROR, "Error: Its Already a Favorite!")
         return HttpResponseRedirect(reverse('organizer:favorites'))
     fm = FavoriteMovie(account=user, movie=movie)
     fm.save()
@@ -200,6 +201,8 @@ def rmFavorite(request):
     user = User.objects.get(pk=request.POST['userID'])
     if FavoriteMovie.objects.filter(account=user, movie=movie).exists():
         FavoriteMovie.objects.filter(account=user, movie=movie).delete()
+    else:
+        messages.add_message(request, messages.ERROR, "Error: The Favorite You Were Trying To Delete Doesn't Exist!")
     return HttpResponseRedirect(reverse('organizer:favorites'))
 
 def GetComment(request):
@@ -209,6 +212,7 @@ def GetComment(request):
     watchparty = Watchparty.objects.get(pk=watchpartyID)
     comment = request.POST['comment']
     if comment == '':
+        messages.add_message(request, messages.ERROR, "Error: Empty Comment!")
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     time = datetime.datetime.now()
     c = Comment(account=user, watchparty=watchparty, text=comment, pub_date=time)
