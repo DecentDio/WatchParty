@@ -1,18 +1,22 @@
 /* Jeff is testing this */
 h1 {
     color: palevioletred;
-    background-color: aliceblue;
+    background-color: transparent;
+    background-blend-mode: lighten;
     text-align: center;
     font-size: 4em;
 
 }
 p {
     color: palevioletred;
-    background-color: aliceblue;
+    background-color: transparent;
     text-align: center;
     width: 200px;
 }
 
 body {
     background: white url("images/background.jpg");
+    background-blend-mode: lighten;
+    margin:0;
+    padding:0;
 }
