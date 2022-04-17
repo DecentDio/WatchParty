@@ -32,7 +32,10 @@ def favoritesView(request):
     for movie in favorites.keys():
         sameTaste = FavoriteMovie.objects.filter(movie=movie).exclude(account=request.user)
         favorites[movie] = sameTaste
-    return render(request, 'organizer/favorites.html', {"favorites": favorites})
+    searchResults = []
+    if "search_box" in request.GET:
+        searchResults = searchMovie(request.GET['search_box'])
+    return render(request, 'organizer/favorites.html', {"favorites": favorites, "searchResults": searchResults})
 
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
@@ -161,6 +164,15 @@ def addMovie(request):
     m = MovieSearcher(account=user, watchparty=watchparty, search=movie)
     m.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
+def addFavorite(request):
+    movie = request.POST['movie']
+    user = User.objects.get(pk=request.POST['userID'])
+    if FavoriteMovie.objects.filter(account=user, movie=movie).exists():
+        return HttpResponseRedirect(reverse('organizer:favorites'))
+    fm = FavoriteMovie(account=user, movie=movie)
+    fm.save()
+    return HttpResponseRedirect(reverse('organizer:favorites'))
 
 def GetComment(request):
     watchpartyID = request.POST['watchpartyID']

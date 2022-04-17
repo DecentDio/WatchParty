@@ -16,5 +16,6 @@ urlpatterns = [
     path('getComment', views.GetComment, name='getComment'),
     path('deleteComment', views.deleteComment, name='deleteComment'),
     path('deleteWatchParties', views.deleteWatchParty, name='deleteWatchParty'),
-    path('favorites', views.favoritesView, name='favorites')
+    path('favorites', views.favoritesView, name='favorites'),
+    path('addFav', views.addFavorite, name='addFav')
 ]
