@@ -11,7 +11,11 @@
         <ul class = "list-group">
         {% for watchparty in watchparties_list %}
             {% if watchparty.account == user  %}
-                <li class="list-group-item text-center"><a href="{% url 'organizer:detail' watchparty.id %}">{{ watchparty.title_text }}</a>: {{ watchparty.start_date }} to {{ watchparty.end_date }}</li>
+                <form method="POST" action = "{% url 'organizer:deleteWatchParty' %}" >
+                    {% csrf_token %}
+                    <li class="list-group-item text-center"><a href="{% url 'organizer:detail' watchparty.id %}">{{ watchparty.title_text }}</a>: {{ watchparty.start_date }} to {{ watchparty.end_date }}</li>
+                    <button type = "submit" name="deletedID" value="{{ watchparty.id }}" onclick="return confirm('Are you sure you want to delete the watch party: {{watchparty.title_text}}?')" /> Delete </button>
+                </form>
             {% endif %}
         {% endfor %}
         </ul>

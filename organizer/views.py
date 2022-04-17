@@ -115,7 +115,10 @@ def kickUser(request):
     Comment.objects.filter(account=user, watchparty=watchparty).delete()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
-
+def deleteWatchParty(request):
+    watchpartyID = request.POST['deletedID']
+    Watchparty.objects.get(pk=watchpartyID).delete()
+    return HttpResponseRedirect(reverse('organizer:watchparties'))
 def addMovie(request):
     watchpartyID = request.POST['watchpartyID']
     userID = request.POST['userID']
