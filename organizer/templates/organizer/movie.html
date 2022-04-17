@@ -5,14 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-    <h2>Enter your watch party details:</h2>
+    <h2>Search Movie:</h2>
     <form method = "post">
-        <input type="hidden" name="account" value = "{{ user }}">
         <table>
             {{ form }}
         </table>
         {% csrf_token %}
-        <button type = "submit" class = "btn btn-dark"> Post</button>
+        <button type = "submit" class = "btn btn-dark"> Search</button>
     </form>
+    {{check}}
 </body>
 </html>

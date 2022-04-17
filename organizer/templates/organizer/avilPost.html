@@ -7,6 +7,8 @@
 <body>
     <h2>Enter availiability:</h2>
     <form method = "post">
+        <input type="hidden" name="watchpartyID" value = "{{ watchpartyID }}">
+        <input type="hidden" name="userID" value = "{{ userID }}">
         <table>
             {{ form }}
         </table>

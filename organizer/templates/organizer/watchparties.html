@@ -10,7 +10,7 @@
         <ul class = "list-group">
         {% for watchparty in watchparties_list %}
             {% if watchparty.account == user  %}
-                <li class="list-group-item text-center"><a href="{% url 'organizer:detail' watchparty.id %}">{{ watchparty.title_text }}</a></li>
+                <li class="list-group-item text-center"><a href="{% url 'organizer:detail' watchparty.id %}">{{ watchparty.title_text }}</a>: {{ watchparty.start_date }} to {{ watchparty.end_date }}</li>
             {% endif %}
         {% endfor %}
         </ul>

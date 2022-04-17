@@ -5,9 +5,12 @@ from . import views
 app_name = 'organizer'
 urlpatterns = [
     path('', views.login, name='login'),
+    path('logout', views.logout_view, name='logout'),
     path("makeParty", views.GetParty, name="form"),
-    path("addUsers", views.GetAdded, name="users"),
-    path("addAvil", views.GetAvil, name="avil"),
+    path("addAvil", views.GetAvil, name="addAvil"),
     path('watchparties', views.WatchParties.as_view(), name='watchparties'),
-    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    path('addMovie', views.addMovie, name='addMovie'),
+    path('addUser', views.addUser, name='addUser'),
+    path('<int:pk>/', views.DetailView, name='detail'),
+    path('kickUser', views.kickUser, name='kickUser')
 ]
