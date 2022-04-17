@@ -27,12 +27,15 @@
         <button id= "search_submit" type ="submit" >Search</button>
     </form>
 
-    {% for range in searchResults %}
-        <input type="radio" id="{{range}}" name="movies" value="{{range}}">
-        <label for="{{range}}"> {{range}} </label><br>
-    {% endfor %}
-    <button type = "submit" class = "save btn btn-dark"> Submit </button>
-
-    <!-- <a href = "{% url 'organizer:movies' %}" > Add a movie </a> -->
+    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+        {% csrf_token %}
+        {% for range in searchResults %}
+            <input type="radio" id="{{range}}" name="movies" value="{{range}}">
+            <label for="{{range}}"> {{range}} </label><br>
+        {% endfor %}
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Submit </button>
+    </form>
 
 </fieldset>

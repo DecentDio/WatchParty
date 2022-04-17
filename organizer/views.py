@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 
 
 def login(request):
@@ -101,3 +102,11 @@ def MovieSearch(request):
     else:
         form = CreateMovieSearch()
     return render(request, "organizer/movie.html", {"form": form})
+
+def addMovie(request):
+    watchpartyID = request.POST['watchpartyID']
+    userID = request.POST['userID']
+    movie = request.POST['movies']
+    m = MovieSearcher(account=User.objects.get(pk=userID), watchparty=Watchparty.objects.get(pk=watchpartyID), search=movie)
+    m.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))

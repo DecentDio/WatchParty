@@ -10,7 +10,7 @@ urlpatterns = [
     path("addUsers", views.GetAdded, name="users"),
     path("addAvil", views.GetAvil, name="avil"),
     path('watchparties', views.WatchParties.as_view(), name='watchparties'),
-    path('moviesearch', views.MovieSearch, name='movies'),
+    path('addMovie', views.addMovie, name='addMovie'),
     path('search', views.MovieIMDB, name='search'),
     path('<int:pk>/', views.DetailView, name='detail'),
 ]
