@@ -21,12 +21,20 @@
 
     <h1>Add more movies</h1>
     <h2>Manually add Movie:</h2>
+    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+        {% csrf_token %}
+        <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add Movie </button>
+    </form>
+
     <h2>Search for a movie:</h2>
     <form type="get" action=".">
         <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
         <button id= "search_submit" type ="submit" >Search</button>
     </form>
-
+    {% if searchResults|length > 1 %}
     <form method="POST" action = "{% url 'organizer:addMovie' %}" >
         {% csrf_token %}
         {% for range in searchResults %}
@@ -35,7 +43,8 @@
         {% endfor %}
         <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
         <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Submit </button>
+        <button type = "submit" > Add Movie </button>
     </form>
+    {% endif %}
 
 </fieldset>
