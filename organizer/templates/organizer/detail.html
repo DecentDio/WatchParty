@@ -24,6 +24,7 @@
         <button type = "submit" > Add User </button>
     </form>
 
+    {% if user == watchparty.account %}
     <h2>Kick User:</h2>
     <form method="POST" action="{% url 'organizer:kickUser' %}">
         {% csrf_token %}
@@ -33,9 +34,9 @@
             {% endfor %}
         </select>
         <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <button type = "submit" > Add User </button>
+        <button type = "submit" > Kick User </button>
     </form>
-
+    {% endif %}
 
 
 
@@ -104,9 +105,16 @@
     </form>
 <h2>Comments:</h2>
     {% for c in comments %}
-        {{ c.account }} : {{ c.text }}
-        {{ c.pub_date }}
-        <br>
+        <fieldset>
+        {{ c.account }} : {{ c.text }} -------------- Posted {{ c.pub_date }}
+        {% if c.account == user %}
+            <form method="POST" action = "{% url 'organizer:deleteComment' %}" >
+                {% csrf_token %}
+                <input type="hidden" name="commentID" value = "{{ c.id }}">
+                <button type = "submit" > Delete </button>
+            </form>
+        {% endif %}
+        </fieldset>
     {% endfor %}
 
 {% endif %}

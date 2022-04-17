@@ -22,12 +22,6 @@ def logout_view(request):
 
 
 def WatchParties(request):
-   # template_name = 'organizer/watchparties.html'
-   # context_object_name = 'watchparties_list'
-
-   #def get_queryset(self):
-   #     return Watchparty.objects.order_by('title_text')
-    
     invitedWatchParties = []
     for party in AddedUser.objects.filter(account=request.user):
         invitedWatchParties.append(party.watchparty)
@@ -43,7 +37,7 @@ def DetailView(request, pk):
         for j in range(len(realList)):
             searchResults.append(realList[j]["title"])
     return render(request, "organizer/detail.html",
-                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("pub_date"), "users": User.objects.all(), "search": getMovieVotes(),
+                  {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "search": getMovieVotes(),
                    "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty)})
 
 
@@ -151,4 +145,10 @@ def GetComment(request):
     time = datetime.datetime.now()
     c = Comment(account=user, watchparty=watchparty, text=comment, pub_date=time)
     c.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
+def deleteComment(request):
+    comment = Comment.objects.get(pk = request.POST['commentID'])
+    watchpartyID = comment.watchparty.id
+    comment.delete()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))

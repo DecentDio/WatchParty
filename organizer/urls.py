@@ -13,5 +13,6 @@ urlpatterns = [
     path('addUser', views.addUser, name='addUser'),
     path('<int:pk>/', views.DetailView, name='detail'),
     path('kickUser', views.kickUser, name='kickUser'),
-    path('getComment', views.GetComment, name='getComment')
+    path('getComment', views.GetComment, name='getComment'),
+    path('deleteComment', views.deleteComment, name='deleteComment')
 ]

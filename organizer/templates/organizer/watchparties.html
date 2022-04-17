@@ -20,13 +20,11 @@
     {% endif %}
 
 
-    <h1 class = "text-center"> My Invited Parties</h1>
+    <h1 class = "text-center"> Watchparties I'm In </h1>
     {% if invitedWatchParties %}
     <ul class = "list-group">
     {% for invitedParty in invitedWatchParties %}
-        {% if invitedParty.account == user  %}
-            <li class="list-group-item text-center"><a href="{% url 'organizer:detail' invitedParty.id %}">{{invitedParty.title_text }}</a>: {{invitedParty.start_date }} to {{invitedParty.end_date }}</li>
-        {% endif %}
+        <li class="list-group-item text-center"><a href="{% url 'organizer:detail' invitedParty.id %}">{{invitedParty.title_text }}</a>: {{invitedParty.start_date }} to {{invitedParty.end_date }}</li>
     {% endfor %}
     </ul>
     {% else %}
