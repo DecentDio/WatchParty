@@ -1,8 +1,5 @@
 /* Jeff is testing this */
 
-
-
-
 h1 {
     color: palevioletred;
     background-color: transparent;
@@ -55,7 +52,7 @@ body {
 }
 /* LOGO */
   .logo {
-  font-size: 32px;
+  font-size: 64px;
 }
 /* NAVBAR MENU */
  .menu {

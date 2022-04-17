@@ -6,6 +6,7 @@
 {% load socialaccount %}
 <html>
 
+    <link rel="stylesheet" type="text/css" href="{% static 'organizer/style.css' %}">
 
 
 <head>
@@ -18,7 +19,7 @@
 
     <nav class="navbar">
         <!-- LOGO -->
-        <div class="logo">MUO</div>
+        <div class="logo"> Welcome, {{ user.username }}! </div>
         <!-- NAVIGATION MENU -->
         <ul class="nav-links">
         <!-- USING CHECKBOX HACK -->
@@ -27,7 +28,7 @@
         <!-- NAVIGATION MENUS -->
         <div class="menu">
         <li><a href="/">Home</a></li>
-        <li><a href="/">About</a></li>
+        <li><a href="/">Watch parties</a></li>
         <li class="services">
         <a href="/">Services</a>
         <!-- DROPDOWN MENU -->
@@ -40,10 +41,10 @@
         </ul>
         </li>
         <li><a href="/">Pricing</a></li>
-        <li><a href="/">Contact</a></li>
+        <li><a href="/">Logout</a></li>
         </div>
         </ul>
-        </nav>
+    </nav>
 
 
         <p>Welcome, {{ user.username }}!</p>
