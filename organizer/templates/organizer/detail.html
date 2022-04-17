@@ -116,6 +116,20 @@
         <button type = "submit" > Add Movie </button>
     </form>
     {% endif %}
+
+    <!-- ADD FROM YOUR FAVORITES -->
+    <h2>Add From Your Favorites: </h2>
+    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+        {% csrf_token %}
+        {% for fav in user.favoritemovie_set.all %}
+                <input type="radio" id="fav{{ fav.movie }}" name="movies" value="{{ fav.movie }}">
+                <label for="fav{{ fav.movie }}"> {{fav.movie}} </label><br>
+        {% endfor %}
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type="hidden" name="userID" value = "{{ user.id }}">
+        <button type = "submit" > Add Movie </button>
+    </form>
+
 </fieldset>
 
 <!-- ADD A NEW COMMENT -->
