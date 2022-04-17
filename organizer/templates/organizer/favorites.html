@@ -11,7 +11,7 @@
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -19,7 +19,7 @@
     <form method="POST" action = "{% url 'organizer:rmFav' %}" >
         {% csrf_token %}
         {% for key,val in favorites.items %}
-            <input type="radio" id="{{ key.movie }}" name="movie" value="{{ key.movie }}">
+            <input type="radio" id="{{ key.movie }}" name="movies" value="{{ key.movie }}">
             <label for="{{ key.movie }}"> "{{key.movie}}"</label>
             {% if val|length > 0 %}
                 ----- Also Favorited By:
@@ -40,7 +40,7 @@
 
     <form method="POST" action = "{% url 'organizer:addFav' %}" >
         {% csrf_token %}
-        <input id="movies" type="text" name="movie" placeholder="Manually add Movie" >
+        <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
         <input type="hidden" name="userID" value = "{{ user.id }}">
         <button type = "submit" > Add Movie </button>
     </form>
@@ -56,7 +56,7 @@
     <form method="POST" action = "{% url 'organizer:addFav' %}" >
         {% csrf_token %}
         {% for range in searchResults %}
-            <input type="radio" id="{{range}}" name="movie" value="{{range}}">
+            <input type="radio" id="{{range}}" name="movies" value="{{range}}">
             <label for="{{range}}"> {{range}} </label><br>
         {% endfor %}
         <input type="hidden" name="userID" value = "{{ user.id }}">

@@ -187,7 +187,10 @@ def addMovie(request):
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
 def addFavorite(request):
-    movie = request.POST['movie']
+    if 'movies' not in request.POST:
+        messages.add_message(request, messages.ERROR, 'Error: No Movie Selected!')
+        return HttpResponseRedirect(reverse('organizer:favorites'))
+    movie = request.POST['movies']
     user = User.objects.get(pk=request.POST['userID'])
     if FavoriteMovie.objects.filter(account=user, movie=movie).exists():
         messages.add_message(request, messages.ERROR, "Error: Its Already a Favorite!")
@@ -197,7 +200,10 @@ def addFavorite(request):
     return HttpResponseRedirect(reverse('organizer:favorites'))
 
 def rmFavorite(request):
-    movie = request.POST['movie']
+    if 'movies' not in request.POST:
+        messages.add_message(request, messages.ERROR, 'Error: No Movie Selected!')
+        return HttpResponseRedirect(reverse('organizer:favorites'))
+    movie = request.POST['movies']
     user = User.objects.get(pk=request.POST['userID'])
     if FavoriteMovie.objects.filter(account=user, movie=movie).exists():
         FavoriteMovie.objects.filter(account=user, movie=movie).delete()
