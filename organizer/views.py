@@ -93,6 +93,8 @@ def addUser(request):
     userID = request.POST['userID']
     user = User.objects.get(pk=userID)
     watchparty = Watchparty.objects.get(pk=watchpartyID)
+    if watchparty.account.username == user.username:
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     if AddedUser.objects.filter(account=user, watchparty=watchparty).exists():
         return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
     au = AddedUser(account=user, watchparty=watchparty)
