@@ -22,6 +22,9 @@ class AddedUser(models.Model):
     def __str__(self):
         return self.account.username + " in " + self.watchparty.title_text
 
+class friendGroup(models.Model):
+    user1 = models.ForeignKey(User, on_delete = models.CASCADE)
+    group
 
 class AvailabilityRange(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)

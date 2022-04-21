@@ -147,6 +147,21 @@ def addUser(request):
     au.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
+def createFriendGroup(request):
+    watchpartyID = request.POST['watchpartyID']
+    userID = request.POST['userID']
+    user = User.objects.get(pk=userID)
+    watchParty = Watchparty.objects.get(pk = watchpartyID)
+    if watchParty.account.username == user.username:
+        messages.add_message(request, messages.ERROR, "Error: User is the Owner!")
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+    if AddedUser.objects.filter(account=user, watchparty=watchparty).exists():
+        messages.add_message(request, messages.ERROR, "Error: User already Added!")
+        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+    friendGroup = AddedUser(account = user, watchparty = watchParty)
+    friendGroup.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
 
 def kickUser(request):
     watchpartyID = request.POST['watchpartyID']
