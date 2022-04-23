@@ -17,6 +17,12 @@
     <h1>Start Date: {{ watchparty.start_date}}</h1>
     <h1>End Date: {{ watchparty.end_date}}</h1>
 
+    <!-- SHOW FINAL WATCHPARTY INFO -->
+    {% if finalizedWP %}
+        <h1> Selected Date: {{ finalizedWP.selected_date }} </h1>
+        <h1> Selected Movie: {{ finalizedWP.selected_movie }} </h1>
+    {% endif %}
+
     <!-- LIST OF ADDED USERS -->
     <h1>Added Users:</h1>
     {% for account in watchparty.addeduser_set.all %}
