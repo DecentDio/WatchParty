@@ -19,8 +19,10 @@
 
     <!-- SHOW FINAL WATCHPARTY INFO -->
     {% if finalizedWP %}
-        <h1> Selected Date: {{ finalizedWP.selected_time }} </h1>
-        <h1> Selected Movie: {{ finalizedWP.selected_movie }} </h1>
+        {% if finalizedWP.selected_time %}
+            <h1> Selected Date: {{ finalizedWP.selected_time }} </h1> {% endif %}
+        {% if finalizedWP.selected_movie %}
+            <h1> Selected Movie: {{ finalizedWP.selected_movie }} </h1> {% endif %}
     {% endif %}
 
     <!-- ALLOW FOR EDITING OF FINAL WATCHPARTY INFO -->
@@ -53,9 +55,6 @@
                 <button id= "edit_submit" type ="submit" >Edit Final WatchParty Info</button>
             </form>
         {% endif %}
-    
-        <!-- ALLOW FOR NOTIFY ALL USERS, VIA GOOGLE CALENDAR -->
-
     {% endif %}
 
 
