@@ -1,5 +1,7 @@
+
 <!-- CHECK IF USER IS ALLOWED TO VIEW THIS PAGE -->
 {% if user in allowedUsers %}
+
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
     <h3> Watchparty Creator: {{ watchparty.account }} </h3>
@@ -26,6 +28,40 @@
     <!-- INVITE NEW USERS -->
     <h2>Invite User:</h2>
     <form method="POST" action="{% url 'organizer:addUser' %}">
+        {% csrf_token %}
+        <select name="userID" id="userID">
+            {% for user in users %}
+                <option value="{{user.id}}">{{user.username}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <button type = "submit" > Add User </button>
+    </form>
+
+    <!-- Creating Friend Group-->
+    <h2> Creating a Friend Group: </h2>
+    <form method="POST" action="{% url 'organizer:createFriendGroup' %}">
+        {% csrf_token %}
+        <label for = "fgName"> Name of Friend Group (up to 10 characters) </label>
+        <input type = "text" id = "fgName" name = "fgName" 
+        required 
+            maxlength = "10"   
+            size = "10">
+            <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+            <input type = "hidden" name = "userID" value = "{{ user.id }}">
+            <button type = "submit" > Create Friend Group </button>
+    </form>
+
+    <!-- List of current friend groups -->
+    <h1>Friend Groups:</h1>
+    {% for group in watchparty.FriendGroup_set.all %}
+        {{ group.group_name }},
+    {% endfor %}
+
+
+    <!-- Adding a friend group-->
+    <h2>Add Friend Group:</h2>
+    <form method="POST" action="{% url 'organizer:createFriendGroup' %}">
         {% csrf_token %}
         <select name="userID" id="userID">
             {% for user in users %}

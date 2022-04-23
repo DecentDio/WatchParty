@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie
+from .models import FriendGroup, Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
@@ -149,16 +149,12 @@ def addUser(request):
 
 def createFriendGroup(request):
     watchpartyID = request.POST['watchpartyID']
-    userID = request.POST['userID']
-    user = User.objects.get(pk=userID)
     watchParty = Watchparty.objects.get(pk = watchpartyID)
-    if watchParty.account.username == user.username:
-        messages.add_message(request, messages.ERROR, "Error: User is the Owner!")
-        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
-    if AddedUser.objects.filter(account=user, watchparty=watchparty).exists():
-        messages.add_message(request, messages.ERROR, "Error: User already Added!")
-        return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
-    friendGroup = AddedUser(account = user, watchparty = watchParty)
+    userID = request.POST['userID']
+    user = User.objects.get(pk = userID)
+    fgName = request.POST['fgName']
+
+    friendGroup = FriendGroup(owner = user, group_name = fgName)
     friendGroup.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
