@@ -16,7 +16,7 @@ class Watchparty(models.Model):
 
 class FinalizedWatchparty(models.Model):
     watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
-    selected_date = models.DateField(auto_now=False)
+    selected_time = models.DateTimeField(auto_now=False)
     selected_movie = models.CharField(max_length=200)
 
 class AddedUser(models.Model):
