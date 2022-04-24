@@ -20,5 +20,6 @@ urlpatterns = [
     path('favorites', views.favoritesView, name='favorites'),
     path('addFav', views.addFavorite, name='addFav'),
     path('rmFav', views.rmFavorite, name='rmFav'),
-    path('rmAvilRange', views.rmAvilRange, name='rmAvilRange')
+    path('rmAvilRange', views.rmAvilRange, name='rmAvilRange'),
+    path('addFriendGroup', views.addFriendGroup, name='addFriendGroup')
 ]

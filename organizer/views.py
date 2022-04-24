@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from .models import FriendGroup, Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie
+from .models import FriendGroup, Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie, FriendGroupMember
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
@@ -61,9 +61,10 @@ def DetailView(request, pk):
     if "search_box" in request.GET:
         searchResults = searchMovie(request.GET['search_box'])
 
+    myFriendGroups = FriendGroup.objects.filter(owner = request.user)
     return render(request, "organizer/detail.html",
                   {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
-                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "sharedRange":startAndEndRange})
+                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "sharedRange":startAndEndRange, "myFriendGroups": myFriendGroups})
 
 def searchMovie(searchTerm):
     ia = Cinemagoer()
@@ -149,15 +150,26 @@ def addUser(request):
 
 def createFriendGroup(request):
     watchpartyID = request.POST['watchpartyID']
-    watchParty = Watchparty.objects.get(pk = watchpartyID)
     userID = request.POST['userID']
     user = User.objects.get(pk = userID)
     fgName = request.POST['fgName']
-
     friendGroup = FriendGroup(owner = user, group_name = fgName)
     friendGroup.save()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
+def addFriendGroup(request):
+    watchpartyID = request.POST['watchpartyID']
+    watchparty = Watchparty.objects.get(pk = watchpartyID)
+    fg = FriendGroup.objects.get(pk=request.POST['fgID'])
+    for fgMember in FriendGroupMember.objects.filter(fg = fg):
+        user = fgMember.fg_member
+        if watchparty.account.username == user.username:
+            continue
+        if AddedUser.objects.filter(account=user, watchparty=watchparty).exists():
+            continue
+        au = AddedUser(account=user, watchparty=watchparty)
+        au.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
 
 def kickUser(request):
     watchpartyID = request.POST['watchpartyID']

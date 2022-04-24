@@ -24,11 +24,15 @@ class AddedUser(models.Model):
 
 class FriendGroup(models.Model):
     owner = models.ForeignKey(User, on_delete = models.CASCADE)
-    group_name = models.CharField(max_length = 200) 
+    group_name = models.CharField(max_length = 200)
+    def __str__(self):
+        return self.group_name
 
-class FriendGroupMembers(models.Model):
+class FriendGroupMember(models.Model):
     fg = models.ForeignKey(FriendGroup, on_delete= models.CASCADE)
     fg_member = models.ForeignKey(User, on_delete= models.CASCADE)
+    def __str__(self):
+        return self.fg_member.username + " in " + self.fg.group_name
 
 class AvailabilityRange(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
