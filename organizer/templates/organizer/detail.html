@@ -19,6 +19,47 @@
     <h1>Start Date: {{ watchparty.start_date}}</h1>
     <h1>End Date: {{ watchparty.end_date}}</h1>
 
+    <!-- SHOW FINAL WATCHPARTY INFO -->
+    {% if finalizedWP %}
+        {% if finalizedWP.selected_time %}
+            <h1> Selected Date: {{ finalizedWP.selected_time }} </h1> {% endif %}
+        {% if finalizedWP.selected_movie %}
+            <h1> Selected Movie: {{ finalizedWP.selected_movie }} </h1> {% endif %}
+    {% endif %}
+
+    <!-- ALLOW FOR EDITING OF FINAL WATCHPARTY INFO -->
+    {% if user == watchparty.account %}
+        {% if editingFin %}
+            {% if not finalizedWP %}
+                <h3>Create Finalized Watchparty Info: </h3>
+            {% else %}
+                <h3>Edit Finalized Watchparty Info:</h3>
+            {% endif %}
+            <form method="POST" action="{% url 'organizer:finalWP' %}">
+                {% csrf_token %}
+                {{ finWPForm.date_time_field }}
+                <br>
+                {% for key, value in search.items %}
+                    {% if watchparty.title_text == key.0|stringformat:"s" %}
+                        <input type="radio" id="finWP_{{key.1}}" name="final_movie" value="{{key.1}}">
+                        <label for="finWP_{{key.1}}"> "{{key.1}}" has {{value}} votes </label>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+                <br>
+                <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                <button type = "submit" > Submit </button>
+            </form>
+        {% else %}
+            <form type="get" action=".">
+                <input type="hidden" name="editFin" value = 1>
+                <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                <button id= "edit_submit" type ="submit" >Edit Final WatchParty Info</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+
     <!-- LIST OF ADDED USERS -->
     <h1>Added Users:</h1>
     {% for account in watchparty.addeduser_set.all %}
