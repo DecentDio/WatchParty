@@ -2,12 +2,12 @@
 
 h1 {
     color: palevioletred;
-    background-color: transparent;
-    background-blend-mode: lighten;
+    background: white;
     text-align: center;
     font-size: 4em;
-
+    padding: 0 20px;
 }
+
 p {
     color: palevioletred;
     background-color: transparent;
@@ -16,10 +16,19 @@ p {
 }
 
 body {
-    background: white url("images/background.jpg");
-    background-blend-mode: lighten;
+    background-image: url("/organizer/static/organizer/images/background.jpg");
     margin:0;
     padding:0;
+}
+
+
+.mainName {
+    font: Permanent Marker;
+    fill: white;
+    stroke: black;
+    stroke-width: 69;
+    font-size: 128;
+
 }
 
 /* UTILITIES */
@@ -30,6 +39,7 @@ body {
    }
    body {
     font-family: cursive;
+    background: white url("images/background.jpg");
    }
    a {
     text-decoration: none;
@@ -44,7 +54,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-    background-color: teal;
+    background-color:palevioletred;
     color: #fff;
    }
 .nav-links a {
@@ -61,7 +71,7 @@ body {
   font-size: 18px;
 }
 .menu li:hover {
-   background-color: #4c9e9e;
+   background-color: palevioletred;
    border-radius: 5px;
     transition: 0.3s ease;
 }
@@ -73,7 +83,7 @@ body {
  position: relative; 
 }
 .dropdown {
-  background-color: rgb(1, 139, 139);
+  background-color: palevioletred;
   padding: 1em 0;
   position: absolute; /*WITH RESPECT TO PARENT*/
   display: none;
@@ -89,7 +99,7 @@ body {
   text-align: center;
 }
 .dropdown li:hover {
-  background-color: #4c9e9e;
+  background-color: palevioletred;
 }
  .services:hover .dropdown {
   display: block;
