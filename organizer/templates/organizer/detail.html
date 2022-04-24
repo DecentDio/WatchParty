@@ -1,5 +1,7 @@
+
 <!-- CHECK IF USER IS ALLOWED TO VIEW THIS PAGE -->
 {% if user in allowedUsers %}
+
 <fieldset>
     <legend><h1>{{ watchparty.title_text }}</h1></legend>
     <h3> Watchparty Creator: {{ watchparty.account }} </h3>
@@ -91,6 +93,29 @@
         <button type = "submit" > Kick User </button>
     </form>
     {% endif %}
+
+    <!-- Adding a friend group-->
+    <h2>Add Friend Group:</h2>
+    <form method="POST" action="{% url 'organizer:addFriendGroup' %}">
+        {% csrf_token %}
+        <select name="fgID" id="friendGroupSelect">
+            {% for fg in myFriendGroups %}
+                <option value="{{fg.id}}">{{fg.group_name}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <button type = "submit" > Add Friend Group </button>
+    </form>
+
+    <!-- Creating Friend Group-->
+    <h2> Creating a Friend Group: </h2>
+    <form method="POST" action="{% url 'organizer:createFriendGroup' %}">
+        {% csrf_token %}
+        <input id="fgName" type="text" name="fgName" placeholder="FriendGroup Name" >
+        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+        <input type = "hidden" name = "userID" value = "{{ user.id }}">
+        <button type = "submit" > Create Friend Group </button>
+    </form>
 
     <!-- SHOW USER'S AVAILABILITY RANGES -->
     <h1>Availability Ranges:</h1>

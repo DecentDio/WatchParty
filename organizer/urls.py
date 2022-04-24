@@ -11,6 +11,7 @@ urlpatterns = [
     path('watchparties', views.WatchParties, name='watchparties'),
     path('addMovie', views.addMovie, name='addMovie'),
     path('addUser', views.addUser, name='addUser'),
+    path('createFriendGroup', views.createFriendGroup, name = 'createFriendGroup'),
     path('<int:pk>/', views.DetailView, name='detail'),
     path('kickUser', views.kickUser, name='kickUser'),
     path('getComment', views.GetComment, name='getComment'),
@@ -20,5 +21,6 @@ urlpatterns = [
     path('addFav', views.addFavorite, name='addFav'),
     path('rmFav', views.rmFavorite, name='rmFav'),
     path('rmAvilRange', views.rmAvilRange, name='rmAvilRange'),
+    path('addFriendGroup', views.addFriendGroup, name='addFriendGroup'),
     path('finalWP', views.finalWP, name='finalWP')
 ]
