@@ -15,4 +15,4 @@ psycopg2
 
 cinemagoer
 
-bootstrap5
+django-bootstrap-v5
