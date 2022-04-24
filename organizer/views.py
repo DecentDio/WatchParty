@@ -39,7 +39,7 @@ def finalWP(request):
     finWP = FinalizedWatchparty(watchparty=watchparty, selected_time=None, selected_movie=None)
     if FinalizedWatchparty.objects.filter(watchparty=watchparty).exists():
         finWP = FinalizedWatchparty.objects.get(watchparty=watchparty)
-    if request.POST['date_time_field'] is not '':
+    if request.POST['date_time_field'] != '':
         finWP.selected_time = request.POST['date_time_field']
     if 'final_movie' in request.POST:
         finWP.selected_movie = request.POST['final_movie']
