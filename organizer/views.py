@@ -1,9 +1,9 @@
 from imdb import Cinemagoer
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
-from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment
+from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment, DateTimeForm
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie
+from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie, FinalizedWatchparty
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
@@ -12,6 +12,12 @@ from django.contrib.auth.models import User
 import datetime
 from django.contrib import messages
 
+def validate(date_text):
+    try:
+        datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M')
+        return True
+    except ValueError:
+        return False
 
 def login(request):
     return render(request, 'organizer/login.html', {})
@@ -27,6 +33,18 @@ def WatchParties(request):
     for party in AddedUser.objects.filter(account=request.user):
         invitedWatchParties.append(party.watchparty)
     return render(request,'organizer/watchparties.html',{"watchparties_list": Watchparty.objects.order_by('title_text'), "invitedWatchParties": invitedWatchParties})
+
+def finalWP(request):
+    watchparty = Watchparty.objects.get(pk=request.POST['watchpartyID'])
+    finWP = FinalizedWatchparty(watchparty=watchparty, selected_time=None, selected_movie=None)
+    if FinalizedWatchparty.objects.filter(watchparty=watchparty).exists():
+        finWP = FinalizedWatchparty.objects.get(watchparty=watchparty)
+    if request.POST['date_time_field'] is not '':
+        finWP.selected_time = request.POST['date_time_field']
+    if 'final_movie' in request.POST:
+        finWP.selected_movie = request.POST['final_movie']
+    finWP.save()
+    return HttpResponseRedirect(reverse('organizer:detail', args=(request.POST['watchpartyID'],)))
 
 def favoritesView(request):
     favorites = dict.fromkeys(FavoriteMovie.objects.filter(account=request.user))
@@ -46,6 +64,7 @@ def DetailView(request, pk):
 
     startAndEndRange = []
 
+    finalizedWP = None
     if len(sharedRangesTime) > 0:
         defaultStartTime = sharedRangesTime[0][0]
         defaultEndTime = sharedRangesTime[0][1]
@@ -58,12 +77,18 @@ def DetailView(request, pk):
         startAndEndRange.append(defaultEndTime)
 
     searchResults = []
+    editingFin = False
     if "search_box" in request.GET:
         searchResults = searchMovie(request.GET['search_box'])
+    if "editFin" in request.GET:
+        editingFin = True
 
+    finWPDateForm = DateTimeForm()
+    if FinalizedWatchparty.objects.filter(watchparty=watchparty).exists():
+        finalizedWP = FinalizedWatchparty.objects.get(watchparty=watchparty)
     return render(request, "organizer/detail.html",
                   {"watchparty": watchparty, "comments": Comment.objects.filter(watchparty=watchparty).order_by("-pub_date"), "users": User.objects.all(), "userVotes": getUsersVotes(request.user),
-                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "sharedRange":startAndEndRange})
+                   "search": getMovieVotes(), "searchResults": searchResults, "allowedUsers": getAllowedUsers(watchparty), "sharedRange":startAndEndRange, "finalizedWP": finalizedWP, "finWPForm": finWPDateForm, "editingFin": editingFin})
 
 def searchMovie(searchTerm):
     ia = Cinemagoer()

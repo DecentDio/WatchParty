@@ -1,5 +1,7 @@
 from django.forms import ModelForm, Textarea, DateInput
 from .models import Watchparty, AddedUser, AvailabilityRange, MovieSearcher, Comment
+from .widget import DatePickerInput, DateTimePickerInput
+from django import forms
 
 
 class CreateWatchParty(ModelForm):
@@ -47,3 +49,7 @@ class CreateComment(ModelForm):
             'text': Textarea()
         }
         exclude = ['account', 'watchparty']
+
+class DateTimeForm(forms.Form):
+    date_field = forms.DateField(widget=DatePickerInput, required=False)
+    date_time_field = forms.DateTimeField(widget=DateTimePickerInput, required=False)

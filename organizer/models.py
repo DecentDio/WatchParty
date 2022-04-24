@@ -8,13 +8,16 @@ class Watchparty(models.Model):
     title_text = models.CharField(max_length=200)
     start_date = models.DateField(auto_now=False)
     end_date = models.DateField(auto_now=False)
-
     def __str__(self):
         return self.title_text
 
     def valid_date_range(self):
         return self.end_date >= self.start_date
 
+class FinalizedWatchparty(models.Model):
+    watchparty = models.ForeignKey(Watchparty, on_delete=models.CASCADE)
+    selected_time = models.DateTimeField(auto_now=False, null=True)
+    selected_movie = models.CharField(max_length=200, null=True)
 
 class AddedUser(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
