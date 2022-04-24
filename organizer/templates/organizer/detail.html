@@ -1,258 +1,326 @@
-
-<!-- CHECK IF USER IS ALLOWED TO VIEW THIS PAGE -->
-{% if user in allowedUsers %}
-
-<fieldset>
-    <legend><h1>{{ watchparty.title_text }}</h1></legend>
-    <h3> Watchparty Creator: {{ watchparty.account }} </h3>
-
-    <!-- {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} -->
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <!-- WATCH PARTY INHERENT INFO -->
-    <h1>Start Date: {{ watchparty.start_date}}</h1>
-    <h1>End Date: {{ watchparty.end_date}}</h1>
-
-    <!-- SHOW FINAL WATCHPARTY INFO -->
-    {% if finalizedWP %}
-        {% if finalizedWP.selected_time %}
-            <h1> Selected Date: {{ finalizedWP.selected_time }} </h1> {% endif %}
-        {% if finalizedWP.selected_movie %}
-            <h1> Selected Movie: {{ finalizedWP.selected_movie }} </h1> {% endif %}
-    {% endif %}
-
-    <!-- ALLOW FOR EDITING OF FINAL WATCHPARTY INFO -->
-    {% if user == watchparty.account %}
-        {% if editingFin %}
-            {% if not finalizedWP %}
-                <h3>Create Finalized Watchparty Info: </h3>
-            {% else %}
-                <h3>Edit Finalized Watchparty Info:</h3>
-            {% endif %}
-            <form method="POST" action="{% url 'organizer:finalWP' %}">
-                {% csrf_token %}
-                {{ finWPForm.date_time_field }}
-                <br>
-                {% for key, value in search.items %}
-                    {% if watchparty.title_text == key.0|stringformat:"s" %}
-                        <input type="radio" id="finWP_{{key.1}}" name="final_movie" value="{{key.1}}">
-                        <label for="finWP_{{key.1}}"> "{{key.1}}" has {{value}} votes </label>
-                        <br>
-                    {% endif %}
-                {% endfor %}
-                <br>
-                <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                <button type = "submit" > Submit </button>
-            </form>
-        {% else %}
-            <form type="get" action=".">
-                <input type="hidden" name="editFin" value = 1>
-                <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                <button id= "edit_submit" type ="submit" >Edit Final WatchParty Info</button>
-            </form>
-        {% endif %}
-    {% endif %}
-
-
-    <!-- LIST OF ADDED USERS -->
-    <h1>Added Users:</h1>
-    {% for account in watchparty.addeduser_set.all %}
-        {{ account.account }},
-    {% endfor %}
-
-    <!-- INVITE NEW USERS -->
-    <h2>Invite User:</h2>
-    <form method="POST" action="{% url 'organizer:addUser' %}">
-        {% csrf_token %}
-        <select name="userID" id="userID">
-            {% for user in users %}
-                <option value="{{user.id}}">{{user.username}}</option>
-            {% endfor %}
-        </select>
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <button type = "submit" > Add User </button>
-    </form>
-
-    <!-- KICK USERS IF YOU ARE OWNER -->
-    {% if user == watchparty.account %}
-    <h2>Kick User:</h2>
-    <form method="POST" action="{% url 'organizer:kickUser' %}">
-        {% csrf_token %}
-        <select name="kickedUserID" id="kickedUserID">
-            {% for user in allowedUsers %}
-                <option value="{{user.id}}">{{user.username}}</option>
-            {% endfor %}
-        </select>
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <button type = "submit" > Kick User </button>
-    </form>
-    {% endif %}
-
-    <!-- Adding a friend group-->
-    <h2>Add Friend Group:</h2>
-    <form method="POST" action="{% url 'organizer:addFriendGroup' %}">
-        {% csrf_token %}
-        <select name="fgID" id="friendGroupSelect">
-            {% for fg in myFriendGroups %}
-                <option value="{{fg.id}}">{{fg.group_name}}</option>
-            {% endfor %}
-        </select>
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <button type = "submit" > Add Friend Group </button>
-    </form>
-
-    <!-- Creating Friend Group-->
-    <h2> Creating a Friend Group: </h2>
-    <form method="POST" action="{% url 'organizer:createFriendGroup' %}">
-        {% csrf_token %}
-        <input id="fgName" type="text" name="fgName" placeholder="FriendGroup Name" >
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type = "hidden" name = "userID" value = "{{ user.id }}">
-        <button type = "submit" > Create Friend Group </button>
-    </form>
-
-    <!-- SHOW USER'S AVAILABILITY RANGES -->
-    <h1>Availability Ranges:</h1>
-
-    <form method="POST" action = "{% url 'organizer:rmAvilRange' %}" >
-        {% csrf_token %}
-        {% for range in watchparty.availabilityrange_set.all %}
-            {% if range.account.username == user.username %}
-                <input type="radio" id="{{ range.id }}" name="avilRangeID" value="{{ range.id }}">
-                <label for="{{ range.id }}"> for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }} </label>
-            {% else %}
-                for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
-            {% endif %}
-            <br>
-        {% endfor %}
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <button type = "submit" > Remove Selected Range </button>
-    </form>
-
-    <form method="GET" action = "{% url 'organizer:addAvil' %}" >
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add an Availability Range </button>
-    </form>
-
-    <!-- Show the optimal range of times to have a watch party-->
-    <h1> Shared Availability Range</h1>
-    {% if sharedRange|length > 0 %}
-    Start Time: {{ sharedRange.0 }} <br>
-    End Time: {{ sharedRange.1 }}
-
-    {% endif %}
-
-
-    <!-- VOTE FOR AN EXISTING MOVIE -->
-    <h1>Vote for a Movie to Watch: </h1>
-    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
-        {% csrf_token %}
-        {% for key, value in search.items %}
-            {% if watchparty.title_text == key.0|stringformat:"s" %}
-                <input type="radio" id="{{key.1}}" name="movies" value="{{key.1}}">
-                <label for="{{key.1}}"> "{{key.1}}" has {{value}} votes </label>
-                {% if key.1 in userVotes %}
-                    <------------ You voted for this
+<!doctype html>
+<html lang="en">
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load socialaccount %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="d-flex flex-column align-items-center justify-content-center">
+    <!-- CHECK IF USER IS ALLOWED TO VIEW THIS PAGE -->
+    <head>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light ms-auto">
+            <a class="btn btn-secondary md" href="{% url 'organizer:login' %}" role="button">Home</a>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="watchpartyDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                Watchparties
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="watchparties">
+                <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
+                <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+              </ul>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                Account
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="account">
+                <li><a class="dropdown-item" href="{% url 'organizer:favorites' %}">Favorites</a></li>
+                <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
+              </ul>
+            </div>
+        </nav>
+        {% if user in allowedUsers %}
+            <!-- WATCH PARTY BASIC INFO -->
+            <div class="container border">
+                <div class="row border">
+                    <p class="display-1 text-center"> {{ watchparty.title_text }}</p>
+                </div>
+                <div class="row">
+                    <p class="h1 text-center"> Watchparty Creator: {{ watchparty.account }} </p>
+                </div>
+                <div class="row">
+                    <p class="h3 text-center"> {{watchparty.start_date}} - {{watchparty.end_date}}</p>
+                </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }} text-center"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
-                <br>
-            {% endif %}
-        {% endfor %}
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" name = "vote"> Vote! </button>
-        <button type = "submit" name = "rmVote"> Remove Vote </button>
-    </form>
-
-    <!-- ADD MORE MOVIES -->
-    <h1>Add more movies</h1>
-
-    <!-- ADD VIA MANUAL INPUT -->
-    <h2>Manually add Movie:</h2>
-    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
-        {% csrf_token %}
-        <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add Movie </button>
-    </form>
-
-    <!-- ADD VIA SEARCHING -->
-    <h2>Search for a movie:</h2>
-    <form type="get" action=".">
-        <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-        <button id= "search_submit" type ="submit" >Search</button>
-    </form>
-
-    {% if searchResults|length > 1 %}
-    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
-        {% csrf_token %}
-        {% for range in searchResults %}
-            <input type="radio" id="{{range}}" name="movies" value="{{range}}">
-            <label for="{{range}}"> {{range}} </label><br>
-        {% endfor %}
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add Movie </button>
-    </form>
-    {% endif %}
-
-    <!-- ADD FROM YOUR FAVORITES -->
-    <h2>Add From Your Favorites: </h2>
-    <form method="POST" action = "{% url 'organizer:addMovie' %}" >
-        {% csrf_token %}
-        {% for fav in user.favoritemovie_set.all %}
-                <input type="radio" id="fav{{ fav.movie }}" name="movies" value="{{ fav.movie }}">
-                <label for="fav{{ fav.movie }}"> {{fav.movie}} </label><br>
-        {% endfor %}
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add Movie </button>
-    </form>
-
-</fieldset>
-
-<!-- ADD A NEW COMMENT -->
-<h2>Add a Comment:</h2>
-    <form method="POST" action = "{% url 'organizer:getComment' %}" >
-        {% csrf_token %}
-        <textarea id="comment" name="comment" rows = "4" cols = "50" placeholder="Type your Comment Here"></textarea>
-        <br>
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add Comment </button>
-    </form>
-
-<!-- VIEW COMMENTS, ABLE TO DELETE YOUR OWN -->
-<h2>Comments:</h2>
-    {% for c in comments %}
-        <fieldset>
-        {{ c.account }} : {{ c.text }} -------------- Posted {{ c.pub_date }}
-        {% if c.account == user %}
-            <form method="POST" action = "{% url 'organizer:deleteComment' %}" >
-                {% csrf_token %}
-                <input type="hidden" name="commentID" value = "{{ c.id }}">
-                <button type = "submit" > Delete </button>
-            </form>
+            </div>
+        {% else %}
+            <p class="display-1 text-center"> No Permissions To View This Watchparty </p>
         {% endif %}
-        </fieldset>
-    {% endfor %}
-<!-- LEAVE WATCHPARTY -->
-{% if watchparty.account.username != user.username %}
-    <form method="POST" action="{% url 'organizer:kickUser' %}">
-        {% csrf_token %}
-        <input type="hidden" name="kickedUserID" value = "{{ user.id }}">
-        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-        <button type = "submit" > Leave WatchParty </button>
-    </form>
-{% endif %}
-<!-- IF NOT AN ALLOWED USER, NO PERMS -->
-{% else %}
-    <h1> No Permissions to View this Watchparty </h1>
-{% endif %}
+    </head>
+    <body>
+
+        {% if user in allowedUsers %}
+            <div class="container-sm align-items-center justify-content-center md border">
+                <!-- SHOW FINAL WATCHPARTY INFO -->
+                {% if finalizedWP %}
+                    {% if finalizedWP.selected_time %}
+                        <div class="row">
+                            <p class="h2 text-center">Meet Time: <strong>{{ finalizedWP.selected_time }} </strong></p> {% endif %}
+                        </div>
+                    {% if finalizedWP.selected_movie %}
+                        <div class="row text-center border">
+                            <p class="h2">Movie: <strong>{{ finalizedWP.selected_movie }} </strong></p> {% endif %}
+                        </div>
+                {% endif %}
+            </div>
+                <!-- ALLOW FOR EDITING OF FINAL WATCHPARTY INFO -->
+                {% if user == watchparty.account %}
+                        {% if editingFin %}
+                            <div class="d-flex justify-content-center">
+                                <div>
+                                {% if not finalizedWP %}
+                                    <p class="h3 text-center">Create Finalized Watchparty Info: </p>
+                                {% else %}
+                                    <p class="h3 text-center">Edit Finalized Watchparty Info:</p>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <form method="POST" action="{% url 'organizer:finalWP' %}">
+                                {% csrf_token %}
+                                <div class="d-flex justify-content-center">
+                                    <div>
+                                        {{ finWPForm.date_time_field }}
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <div>
+                                        {% for key, value in search.items %}
+                                            {% if watchparty.title_text == key.0|stringformat:"s" %}
+                                                <input type="radio" id="finWP_{{key.1}}" name="final_movie" value="{{key.1}}">
+                                                <label for="finWP_{{key.1}}"> "{{key.1}}" has {{value}} votes </label>
+                                                <br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <div>
+                                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                                        <button class="btn btn-primary" type="submit"> Submit </button>
+                                    </div>
+                                </div>
+                            </form>
+                        {% else %}
+                            <div class="d-flex justify-content-center">
+                                <div>
+                                    <form type="get" action=".">
+                                        <input type="hidden" name="editFin" value = 1>
+                                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                                        <button id= "edit_submit" class="btn btn-primary" type="submit"> Edit Final WatchParty Info </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                {% endif %}
+
+                <div class="d-flex flex-column align-items-center justify-content-center border">
+                    <!-- LIST OF ADDED USERS -->
+                    <p class="h1 text-center">Added Users:</p>
+                    {% for account in watchparty.addeduser_set.all %}
+                        {{ account.account }},
+                    {% endfor %}
+                    <!-- INVITE NEW USERS -->
+                    <h2>Invite User:</h2>
+                    <form method="POST" action="{% url 'organizer:addUser' %}">
+                        {% csrf_token %}
+                        <select name="userID" id="userID">
+                            {% for user in users %}
+                                <option value="{{user.id}}">{{user.username}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                        <button class="btn btn-primary" type="submit"> Add User </button>
+                    </form>
+
+                    <!-- KICK USERS IF YOU ARE OWNER -->
+                    {% if user == watchparty.account %}
+                    <h2>Kick User:</h2>
+                    <form method="POST" action="{% url 'organizer:kickUser' %}">
+                        {% csrf_token %}
+                        <select name="kickedUserID" id="kickedUserID">
+                            {% for user in allowedUsers %}
+                                <option value="{{user.id}}">{{user.username}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                        <button class="btn btn-primary" type="submit"> Kick User </button>
+                    </form>
+                    {% endif %}
+
+                    <!-- Adding a friend group-->
+                    <h2>Add Friend Group:</h2>
+                    <form method="POST" action="{% url 'organizer:addFriendGroup' %}">
+                        {% csrf_token %}
+                        <select name="fgID" id="friendGroupSelect">
+                            {% for fg in myFriendGroups %}
+                                <option value="{{fg.id}}">{{fg.group_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                        <button class="btn btn-primary" type="submit"> Add Friend Group </button>
+                    </form>
+                </div>
+                <!-- Creating Friend Group-->
+                <!--<h2> Creating a Friend Group: </h2>
+                <form method="POST" action="{% url 'organizer:createFriendGroup' %}">
+                    {% csrf_token %}
+                    <input id="fgName" type="text" name="fgName" placeholder="FriendGroup Name" >
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type = "hidden" name = "userID" value = "{{ user.id }}">
+                    <button type = "submit" > Create Friend Group </button>
+                </form>-->
+
+                <!-- SHOW USER'S AVAILABILITY RANGES -->
+                <h1>Availability Ranges:</h1>
+                <div>
+                <form method="POST" action = "{% url 'organizer:rmAvilRange' %}" >
+                    {% csrf_token %}
+                    {% for range in watchparty.availabilityrange_set.all %}
+                        {% if range.account.username == user.username %}
+                            <input type="radio" id="{{ range.id }}" name="avilRangeID" value="{{ range.id }}">
+                            <label for="{{ range.id }}"> for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }} </label>
+                        {% else %}
+                            for User {{ range.account }}: {{ range.start_time }} - {{ range.end_time }}
+                        {% endif %}
+                        <br>
+                    {% endfor %}
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <button class="btn btn-primary" type="submit"> Remove Selected Range </button>
+                </form>
+
+                <form method="GET" action = "{% url 'organizer:addAvil' %}" >
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <button class="btn btn-primary" type="submit"> Add Availability Range </button>
+                </form>
+                </div>
+                <!-- Show the optimal range of times to have a watch party-->
+                <h1> Shared Availability Range</h1>
+                {% if sharedRange|length > 0 %}
+                Start Time: {{ sharedRange.0 }} <br>
+                End Time: {{ sharedRange.1 }}
+
+                {% endif %}
+
+
+                <!-- VOTE FOR AN EXISTING MOVIE -->
+                <h1>Vote for a Movie to Watch: </h1>
+                <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+                    {% csrf_token %}
+                    {% for key, value in search.items %}
+                        {% if watchparty.title_text == key.0|stringformat:"s" %}
+                            <input type="radio" id="{{key.1}}" name="movies" value="{{key.1}}">
+                            <label for="{{key.1}}"> "{{key.1}}" has {{value}} votes </label>
+                            {% if key.1 in userVotes %}
+                                <------------ You voted for this
+                            {% endif %}
+                            <br>
+                        {% endif %}
+                    {% endfor %}
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <button class="btn btn-primary" name = "vote" type="submit"> Vote! </button>
+                    <button class="btn btn-primary" name = "rmVote" type="submit"> Remove Vote </button>
+                </form>
+
+                <!-- ADD MORE MOVIES -->
+                <h1>Add more movies</h1>
+
+                <!-- ADD VIA MANUAL INPUT -->
+                <h2>Manually add Movie:</h2>
+                <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+                    {% csrf_token %}
+                    <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <button class="btn btn-primary" type="submit"> Add Movie </button>
+                </form>
+
+                <!-- ADD VIA SEARCHING -->
+                <h2>Search for a movie:</h2>
+                <form type="get" action=".">
+                    <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+                    <button class="btn btn-primary" type="submit" id="search_submit"> Search </button>
+                </form>
+
+                {% if searchResults|length > 1 %}
+                <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+                    {% csrf_token %}
+                    {% for range in searchResults %}
+                        <input type="radio" id="{{range}}" name="movies" value="{{range}}">
+                        <label for="{{range}}"> {{range}} </label><br>
+                    {% endfor %}
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <button class="btn btn-primary" type="submit"> Add Movie </button>
+                </form>
+                {% endif %}
+
+                <!-- ADD FROM YOUR FAVORITES -->
+                <h2>Add From Your Favorites: </h2>
+                <form method="POST" action = "{% url 'organizer:addMovie' %}" >
+                    {% csrf_token %}
+                    {% for fav in user.favoritemovie_set.all %}
+                            <input type="radio" id="fav{{ fav.movie }}" name="movies" value="{{ fav.movie }}">
+                            <label for="fav{{ fav.movie }}"> {{fav.movie}} </label><br>
+                    {% endfor %}
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <button class="btn btn-primary" type="submit"> Add Movie </button>
+                </form>
+            <!-- ADD A NEW COMMENT -->
+            <h2>Add a Comment:</h2>
+                <form method="POST" action = "{% url 'organizer:getComment' %}" >
+                    {% csrf_token %}
+                    <textarea id="comment" name="comment" rows = "4" cols = "50" placeholder="Type your Comment Here"></textarea>
+                    <br>
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <button class="btn btn-primary" type = "submit" > Add Comment </button>
+                </form>
+
+            <!-- VIEW COMMENTS, ABLE TO DELETE YOUR OWN -->
+            <h2>Comments:</h2>
+                {% for c in comments %}
+                    <fieldset>
+                    {{ c.account }} : {{ c.text }} -------------- Posted {{ c.pub_date }}
+                    {% if c.account == user %}
+                        <form method="POST" action = "{% url 'organizer:deleteComment' %}" >
+                            {% csrf_token %}
+                            <input type="hidden" name="commentID" value = "{{ c.id }}">
+                            <button class="btn btn-primary" type = "submit" > Delete </button>
+                        </form>
+                    {% endif %}
+                    </fieldset>
+                {% endfor %}
+            <!-- LEAVE WATCHPARTY -->
+            {% if watchparty.account.username != user.username %}
+                <form method="POST" action="{% url 'organizer:kickUser' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="kickedUserID" value = "{{ user.id }}">
+                    <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
+                    <button class="btn btn-primary" type = "submit" > Leave WatchParty </button>
+                </form>
+            {% endif %}
+        <!-- IF NOT AN ALLOWED USER, NO PERMS -->
+        {% endif %}
+    </body>
+    <footer class="mt-auto">
+        <div class= "navbar navbar-inverse navbar-static-bottom" role="navigation">
+            <div class="navbar-text pull-left">
+                <p>CS3240 Sp22 Team B-22</p>
+            </div>
+        </div>
+    </footer>
+</div>
+</html>
