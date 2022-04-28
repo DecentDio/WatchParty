@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','b22-watch-party.herokuapp.com']
 
-
+SECURE_SSL_REDIRECT=True
 # Application definition
 
 INSTALLED_APPS = [
