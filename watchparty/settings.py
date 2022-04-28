@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','b22-watch-party.herokuapp.com']
 
-SECURE_SSL_REDIRECT=True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -144,11 +144,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
+SECURE_SSL_REDIRECT=False
+SECURE_HSTS_SECONDS = 0
 try:
     if 'HEROKU' in os.environ:
         import django_heroku
         django_heroku.settings(locals())
+        SECURE_SSL_REDIRECT=True
+        SECURE_HSTS_SECONDS = 3600
 except ImportError:
     found = False
 
