@@ -59,7 +59,7 @@ Account
     
 </ul>
 
-<ul class="navbar-nav1 mr-auto mf-2 mf-lg-0"></ul>
+<ul class="navbar-nav1 ms-auto mf-2 mf-lg-0"></ul>
     <a class="nav1-item dropdown">
         <a class="nav1-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         Welcome, {{user}}
@@ -86,7 +86,6 @@ Account
 
 <div class = "container">
     <div class = "row">
-        <div class = "col">
             <h1> My Favorites</h1>
 
             {% if messages %}
@@ -118,10 +117,70 @@ Account
             </div>
             </form>
         </div>
-        <div class = "col">
-            
+    <div class = "row">
+        <h1>Add more favorite movies</h1>
+
+        <!-- ADD VIA MANUAL INPUT -->
+        <!-- <h2>Manually Add:</h2> -->
+        
+        <form method="POST" action = "{% url 'organizer:addFav' %}">
+            <div class="mb-3">
+                <label for="addMovies" class="form-label"> Manually Add Your Movie</label>
+                <br>
+                <input id="movies" type="text" name="movies" placeholder="Enter movie name" >
+                <input type="hidden" name="userID" value = "{{ user.id }}">
+                <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+            </div>
+            <button type="submit" >Add movie</button>
+            </form>
+        
+        
+        <!-- <form method="POST" action = "{% url 'organizer:addFav' %}" >
+            {% csrf_token %}
+            <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
+            <input type="hidden" name="userID" value = "{{ user.id }}">
+            <button type = "submit" > Add Movie </button>
+        </form> -->
+        
+        <!-- ADD VIA SEARCHING -->
+        <br>
+        
+        <form method="GET" action="{% url 'organizer:favorites' %}">
+            <div class="mb-3">
+                <label for="searchMovies" class="form-label"> Search Your Movie</label>
+                <br>
+                <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+                <!--<input type="hidden" name="userID" value = "{{ user.id }}"> -->
+                <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+            </div>
+            <button id= "search_submit" type ="submit" >Search</button>
+            </form>
+        
+        
+        <!-- <h2>Search:</h2>
+        <form method="GET" action="{% url 'organizer:favorites' %}">
+            <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+            <button id= "search_submit" type ="submit" >Search</button>
+        </form> -->
+        
+        
+        {% if searchResults|length > 1 %}
+        <form method="POST" action = "{% url 'organizer:addFav' %}" >
+            {% csrf_token %}
+            {% for range in searchResults %}
+            <div class = "btn-group-vertical" role = "group" aria-label = "Basic radio toggle button group">
+                <input type="radio" class = "btn-check" id="{{range}}" name="movies" value="{{range}}" autocomplete = "off" checked>
+                <label class = "btn btn-outline-secondary" for="{{range}}"> {{range}} </label>
+            {% endfor %}
+            <input type="hidden" name="userID" value = "{{ user.id }}">
+            <button type = "submit" > Add Movie </button>
         </div>
-    </div>
+        </form>
+        {% endif %}
+        
+        
+        </div>
+    
 </div>
 
 
@@ -178,66 +237,6 @@ Account
 <button type = "submit" > Remove Favorite </button>
 </form>
 -->
-
-<h1>Add more favorite movies</h1>
-
-<!-- ADD VIA MANUAL INPUT -->
-<!-- <h2>Manually Add:</h2> -->
-
-<form method="POST" action = "{% url 'organizer:addFav' %}">
-    <div class="mb-3">
-        <label for="addMovies" class="form-label"> Manually Add Your Movie</label>
-        <br>
-        <input id="movies" type="text" name="movies" placeholder="Enter movie name" >
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
-    </div>
-    <button type="submit" >Add movie</button>
-    </form>
-
-
-<!-- <form method="POST" action = "{% url 'organizer:addFav' %}" >
-    {% csrf_token %}
-    <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
-    <input type="hidden" name="userID" value = "{{ user.id }}">
-    <button type = "submit" > Add Movie </button>
-</form> -->
-
-<!-- ADD VIA SEARCHING -->
-<br>
-
-<form method="GET" action="{% url 'organizer:favorites' %}">
-    <div class="mb-3">
-        <label for="searchMovies" class="form-label"> Search Your Movie</label>
-        <br>
-        <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-        <!--<input type="hidden" name="userID" value = "{{ user.id }}"> -->
-        <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
-    </div>
-    <button id= "search_submit" type ="submit" >Search</button>
-    </form>
-
-
-<!-- <h2>Search:</h2>
-<form method="GET" action="{% url 'organizer:favorites' %}">
-    <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-    <button id= "search_submit" type ="submit" >Search</button>
-</form> -->
-
-
-{% if searchResults|length > 1 %}
-<form method="POST" action = "{% url 'organizer:addFav' %}" >
-    {% csrf_token %}
-    {% for range in searchResults %}
-    <div class = "btn-group-vertical" role = "group" aria-label = "Basic radio toggle button group">
-        <input type="radio" class = "btn-check" id="{{range}}" name="movies" value="{{range}}" autocomplete = "off" checked>
-        <label class = "btn btn-outline-secondary" for="{{range}}"> {{range}} </label>
-    {% endfor %}
-    <input type="hidden" name="userID" value = "{{ user.id }}">
-    <button type = "submit" > Add Movie </button>
-</div>
-</form>
-{% endif %}
 
 
 
