@@ -9,72 +9,72 @@
 
 <!-- 
 <nav class="navbar navbar-expand-lg navbar-light bg-light ms-auto">
-    <a class="btn btn-secondary md" href="{% url 'organizer:login' %}" role="button">Home</a>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="watchpartyDropDown" data-bs-toggle="dropdown" aria-expanded="false">
-        Watchparties
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="watchparties">
-        <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
-        <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
-        </ul>
-    </div>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropDown" data-bs-toggle="dropdown" aria-expanded="false">
-        Account
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="account">
-        <li><a class="dropdown-item" href="{% url 'organizer:favorites' %}">Favorites</a></li>
-        <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
-        </ul>
-    </div>
+<a class="btn btn-secondary md" href="{% url 'organizer:login' %}" role="button">Home</a>
+<div class="dropdown">
+<button class="btn btn-secondary dropdown-toggle" type="button" id="watchpartyDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+Watchparties
+</button>
+<ul class="dropdown-menu" aria-labelledby="watchparties">
+<li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
+<li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+</ul>
+</div>
+<div class="dropdown">
+<button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+Account
+</button>
+<ul class="dropdown-menu" aria-labelledby="account">
+<li><a class="dropdown-item" href="{% url 'organizer:favorites' %}">Favorites</a></li>
+<li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
+</ul>
+</div>
 </nav>
 -->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Watchparty</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'organizer:login' %}" role="button">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Watchparties
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
-                <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
-              
-            </ul>
-            </li>
-            <li class = "Favorites">
-                <a class="nav-link favorites" aria-current="page" href="{% url 'organizer:favorites' %}" role="button"> Favorites </a>
-            </li>
-
-            
-        </ul>
-
-        <ul class="navbar-nav1 mr-auto mf-2 mf-lg-0"></ul>
-            <li class="nav1-item dropdown">
-                <a class="nav1-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Welcome, {{user}}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
-                <!-- <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li> -->
-                </ul>
-            </li>
-        </ul>
+<div class="container-fluid">
+<a class="navbar-brand" href="#">Watchparty</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'organizer:login' %}" role="button">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Watchparties
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
+        <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
         
-    </div>
-    </div>
-    </nav>
+    </ul>
+    </li>
+    <li class = "Favorites">
+        <a class="nav-link favorites" aria-current="page" href="{% url 'organizer:favorites' %}" role="button"> Favorites </a>
+    </li>
+
+    
+</ul>
+
+<ul class="navbar-nav1 mr-auto mf-2 mf-lg-0"></ul>
+    <a class="nav1-item dropdown">
+        <a class="nav1-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Welcome, {{user}}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
+        <!-- <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+        </ul>
+    </a>
+</ul>
+
+</div>
+</div>
+</nav>
 
 <head>
 <meta charset="UTF-8">
@@ -82,33 +82,102 @@
 <h1 class = "text-center"> {{user}}'s List of Favorited Movies</h1> -->
 </head>
 <body>
+
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col">
+            <h1> My Favorites</h1>
+
+            {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form method="POST" action = "{% url 'organizer:rmFav' %}" >
+            {% csrf_token %}
+            {% for key,val in favorites.items %}
+            <div class = "btn-group-vertical" role = "group" aria-label = "Basic radio toggle button group">
+            <input type="radio" class = "btn-check" id="{{ key.movie }}" name="movies" value="{{ key.movie }}" autocomplete="off" checked>
+            <label class = "btn btn-outline-secondary" for="{{ key.movie }}"> "{{key.movie}}"</label>
+            {% if val|length > 0 %}
+                ----- Also Favorited By:
+                {% for sameTaster in val %}
+                    {{ sameTaster.account }}, 
+                {% endfor %}
+                
+            {% endif %}
+
+            {% endfor %}
+            <br>
+            <input type="hidden" name="userID" value = "{{ user.id }}">
+            <button type = "submit" > Remove Favorite </button>
+            </div>
+            </form>
+        </div>
+        <div class = "col">
+            
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 
 <h1> My Favorites</h1>
 
 {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+<ul class="messages">
+{% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+{% endfor %}
+</ul>
 {% endif %}
 
-
 <form method="POST" action = "{% url 'organizer:rmFav' %}" >
-    {% csrf_token %}
-    {% for key,val in favorites.items %}
-        <input type="radio" id="{{ key.movie }}" name="movies" value="{{ key.movie }}">
-        <label for="{{ key.movie }}"> "{{key.movie}}"</label>
-        {% if val|length > 0 %}
-            ----- Also Favorited By:
-            {% for sameTaster in val %}
-                {{ sameTaster.account }},
-            {% endfor %}
-        {% endif %}
-        <br>
+{% csrf_token %}
+{% for key,val in favorites.items %}
+<div class = "btn-group-vertical" role = "group" aria-label = "Basic radio toggle button group">
+<input type="radio" class = "btn-check" id="{{ key.movie }}" name="movies" value="{{ key.movie }}" autocomplete="off" checked>
+<label class = "btn btn-outline-secondary" for="{{ key.movie }}"> "{{key.movie}}"</label>
+{% if val|length > 0 %}
+    ----- Also Favorited By:
+    {% for sameTaster in val %}
+        {{ sameTaster.account }}, 
     {% endfor %}
-    <input type="hidden" name="userID" value = "{{ user.id }}">
-    <button type = "submit" > Remove Favorite </button>
+    
+{% endif %}
+
+{% endfor %}
+<br>
+<input type="hidden" name="userID" value = "{{ user.id }}">
+<button type = "submit" > Remove Favorite </button>
+</div>
 </form>
+-->
+
+
+<!--
+<form method="POST" action = "{% url 'organizer:rmFav' %}" >
+{% csrf_token %}
+{% for key,val in favorites.items %}
+<input type="radio" id="{{ key.movie }}" name="movies" value="{{ key.movie }}">
+<label for="{{ key.movie }}"> "{{key.movie}}"</label>
+{% if val|length > 0 %}
+    ----- Also Favorited By:
+    {% for sameTaster in val %}
+        {{ sameTaster.account }},
+    {% endfor %}
+{% endif %}
+<br>
+{% endfor %}
+<input type="hidden" name="userID" value = "{{ user.id }}">
+<button type = "submit" > Remove Favorite </button>
+</form>
+-->
 
 <h1>Add more favorite movies</h1>
 
@@ -123,7 +192,7 @@
         <input type="hidden" name="userID" value = "{{ user.id }}">
         <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
     </div>
-    <button type="submit" class="btn btn-primary">Add movie</button>
+    <button type="submit" >Add movie</button>
     </form>
 
 
@@ -135,6 +204,7 @@
 </form> -->
 
 <!-- ADD VIA SEARCHING -->
+<br>
 
 <form method="GET" action="{% url 'organizer:favorites' %}">
     <div class="mb-3">
@@ -154,17 +224,22 @@
     <button id= "search_submit" type ="submit" >Search</button>
 </form> -->
 
+
 {% if searchResults|length > 1 %}
 <form method="POST" action = "{% url 'organizer:addFav' %}" >
     {% csrf_token %}
     {% for range in searchResults %}
-        <input type="radio" id="{{range}}" name="movies" value="{{range}}">
-        <label for="{{range}}"> {{range}} </label><br>
+    <div class = "btn-group-vertical" role = "group" aria-label = "Basic radio toggle button group">
+        <input type="radio" class = "btn-check" id="{{range}}" name="movies" value="{{range}}" autocomplete = "off" checked>
+        <label class = "btn btn-outline-secondary" for="{{range}}"> {{range}} </label>
     {% endfor %}
     <input type="hidden" name="userID" value = "{{ user.id }}">
     <button type = "submit" > Add Movie </button>
+</div>
 </form>
 {% endif %}
+
+
 
 </body>
 </html>
