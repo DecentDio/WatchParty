@@ -3,96 +3,168 @@
 {% load static %}
 {% load bootstrap5 %}
 {% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <html lang="en">
+
+<!-- 
+<nav class="navbar navbar-expand-lg navbar-light bg-light ms-auto">
+    <a class="btn btn-secondary md" href="{% url 'organizer:login' %}" role="button">Home</a>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="watchpartyDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+        Watchparties
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="watchparties">
+        <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
+        <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+        </ul>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+        Account
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="account">
+        <li><a class="dropdown-item" href="{% url 'organizer:favorites' %}">Favorites</a></li>
+        <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Watchparty</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'organizer:login' %}" role="button">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Watchparties
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
+                <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+              
+            </ul>
+            </li>
+            <li class = "Favorites">
+                <a class="nav-link favorites" aria-current="page" href="{% url 'organizer:favorites' %}" role="button"> Favorites </a>
+            </li>
+
+            
+        </ul>
+
+        <ul class="navbar-nav1 mr-auto mf-2 mf-lg-0"></ul>
+            <li class="nav1-item dropdown">
+                <a class="nav1-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Welcome, {{user}}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
+                <!-- <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                </ul>
+            </li>
+        </ul>
+        
+    </div>
+    </div>
+    </nav>
+
 <head>
-    <meta charset="UTF-8">
-    <p class = "fs-2"> {{user}}'s List of Favorited Movies </p> 
-    <!--<h1 class = "text-center"> {{user}}'s List of Favorited Movies</h1> -->
+<meta charset="UTF-8">
+<!-- <p class = "fs-2"> {{user}}'s List of Favorited Movies </p> 
+<h1 class = "text-center"> {{user}}'s List of Favorited Movies</h1> -->
 </head>
 <body>
-    <h1> My Favorites</h1>
+<h1> My Favorites</h1>
 
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+<form method="POST" action = "{% url 'organizer:rmFav' %}" >
+    {% csrf_token %}
+    {% for key,val in favorites.items %}
+        <input type="radio" id="{{ key.movie }}" name="movies" value="{{ key.movie }}">
+        <label for="{{ key.movie }}"> "{{key.movie}}"</label>
+        {% if val|length > 0 %}
+            ----- Also Favorited By:
+            {% for sameTaster in val %}
+                {{ sameTaster.account }},
             {% endfor %}
-        </ul>
-    {% endif %}
+        {% endif %}
+        <br>
+    {% endfor %}
+    <input type="hidden" name="userID" value = "{{ user.id }}">
+    <button type = "submit" > Remove Favorite </button>
+</form>
 
+<h1>Add more favorite movies</h1>
 
-    <form method="POST" action = "{% url 'organizer:rmFav' %}" >
-        {% csrf_token %}
-        {% for key,val in favorites.items %}
-            <input type="radio" id="{{ key.movie }}" name="movies" value="{{ key.movie }}">
-            <label for="{{ key.movie }}"> "{{key.movie}}"</label>
-            {% if val|length > 0 %}
-                ----- Also Favorited By:
-                {% for sameTaster in val %}
-                    {{ sameTaster.account }},
-                {% endfor %}
-            {% endif %}
-            <br>
-        {% endfor %}
+<!-- ADD VIA MANUAL INPUT -->
+<!-- <h2>Manually Add:</h2> -->
+
+<form method="POST" action = "{% url 'organizer:addFav' %}">
+    <div class="mb-3">
+        <label for="addMovies" class="form-label"> Manually Add Your Movie</label>
+        <br>
+        <input id="movies" type="text" name="movies" placeholder="Enter movie name" >
         <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Remove Favorite </button>
+        <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+    </div>
+    <button type="submit" class="btn btn-primary">Add movie</button>
     </form>
 
-    <h1>Add more favorite movies</h1>
 
-    <!-- ADD VIA MANUAL INPUT -->
-    <!-- <h2>Manually Add:</h2> -->
+<!-- <form method="POST" action = "{% url 'organizer:addFav' %}" >
+    {% csrf_token %}
+    <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
+    <input type="hidden" name="userID" value = "{{ user.id }}">
+    <button type = "submit" > Add Movie </button>
+</form> -->
 
-    <form method="POST" action = "{% url 'organizer:addFav' %}">
-        <div class="mb-3">
-          <label for="addMovies" class="form-label"> Manually Add Your Movie</label>
-          <br>
-          <input id="movies" type="text" name="movies" placeholder="Enter movie name" >
-          <input type="hidden" name="userID" value = "{{ user.id }}">
-          <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
-        </div>
-        <button type="submit" class="btn btn-primary">Add movie</button>
-      </form>
+<!-- ADD VIA SEARCHING -->
 
-
-   <!-- <form method="POST" action = "{% url 'organizer:addFav' %}" >
-        {% csrf_token %}
-        <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add Movie </button>
-    </form> -->
-
-    <!-- ADD VIA SEARCHING -->
-
-    <form method="GET" action="{% url 'organizer:favorites' %}">
-        <div class="mb-3">
-          <label for="searchMovies" class="form-label"> Search Your Movie</label>
-          <br>
-          <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-          <!--<input type="hidden" name="userID" value = "{{ user.id }}"> -->
-          <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
-        </div>
-        <button id= "search_submit" type ="submit" >Search</button>
-      </form>
-
-
-    <!-- <h2>Search:</h2>
-    <form method="GET" action="{% url 'organizer:favorites' %}">
+<form method="GET" action="{% url 'organizer:favorites' %}">
+    <div class="mb-3">
+        <label for="searchMovies" class="form-label"> Search Your Movie</label>
+        <br>
         <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-        <button id= "search_submit" type ="submit" >Search</button>
-    </form> -->
-
-    {% if searchResults|length > 1 %}
-    <form method="POST" action = "{% url 'organizer:addFav' %}" >
-        {% csrf_token %}
-        {% for range in searchResults %}
-            <input type="radio" id="{{range}}" name="movies" value="{{range}}">
-            <label for="{{range}}"> {{range}} </label><br>
-        {% endfor %}
-        <input type="hidden" name="userID" value = "{{ user.id }}">
-        <button type = "submit" > Add Movie </button>
+        <!--<input type="hidden" name="userID" value = "{{ user.id }}"> -->
+        <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+    </div>
+    <button id= "search_submit" type ="submit" >Search</button>
     </form>
-    {% endif %}
+
+
+<!-- <h2>Search:</h2>
+<form method="GET" action="{% url 'organizer:favorites' %}">
+    <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+    <button id= "search_submit" type ="submit" >Search</button>
+</form> -->
+
+{% if searchResults|length > 1 %}
+<form method="POST" action = "{% url 'organizer:addFav' %}" >
+    {% csrf_token %}
+    {% for range in searchResults %}
+        <input type="radio" id="{{range}}" name="movies" value="{{range}}">
+        <label for="{{range}}"> {{range}} </label><br>
+    {% endfor %}
+    <input type="hidden" name="userID" value = "{{ user.id }}">
+    <button type = "submit" > Add Movie </button>
+</form>
+{% endif %}
 
 </body>
 </html>
