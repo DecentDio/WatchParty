@@ -42,7 +42,7 @@
                     Welcome, {{user}}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
+                        <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
                     <!-- <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#">Something else here</a></li> -->
                     </ul>
@@ -85,13 +85,11 @@
     </nav>
     -->
 
-    
     <script>
-        $(document).ready(function() {
-            $("#myBtn").click(function() {
-                $("#popUp").modal("show");
-            });
-        });
+    function popupConfirm() {
+      var myPopup = new bootstrap.Modal(document.getElementById("popUp"));
+      myPopup.show();
+    }
     </script>
 
     <!-- <p class = "h1 text-center"> {{user}}'s Watch Parties</p> -->
@@ -125,8 +123,8 @@
                                                     <li class="list-group-item text-center"><a href="{% url 'organizer:detail' watchparty.id %}">{{ watchparty.title_text }}</a>: {{ watchparty.start_date }} to {{ watchparty.end_date }}</li>
                                                 </div>
                                                 <div class="col-sm-2">
-                                                <button type = "button" id="myBtn" style="float:right" class="btn btn-danger"> Delete </button>
-                                                <!-- <button type = "submit" style="float:right" name="deletedID" value="{{ watchparty.id }}" onclick="return confirm('Are you sure you want to delete the watch party: {{watchparty.title_text}}?')" > Delete </button>-->
+                                                <button type = "button" id="myBtn" style="float:right" class="btn btn-danger" name="deletedID" value="{{ watchparty.id }}" onclick="popupConfirm()"> Delete </button>
+                                                <!--<button type = "submit" style="float:right" name="deletedID" value="{{ watchparty.id }}" onclick="return confirm('Are you sure you want to delete the watch party: {{watchparty.title_text}}?')" > Delete </button>-->
                                                 <!-- Modal HTML,  sorry for the messed up indentation-->
                         <div id="popUp" class="modal fade" tabindex="-1">
                             <div class="modal-dialog">
@@ -172,7 +170,7 @@
                     {% endif %}
                 </div>
             </div>
-            <button type="button" class="btn btn-info" onclick= "location.href='{% url 'organizer:form' %}';">Create WatchParty</button>
+            <button type="button" class="btn btn-info" onclick= "location.href='{% url 'organizer:form' %}'">Create WatchParty</button>
             
         </div>
     </div>
