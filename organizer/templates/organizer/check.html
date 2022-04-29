@@ -1,3 +1,7 @@
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,14 +9,19 @@
     <title>Title</title>
 </head>
 <body>
-    <h2>Enter your watch party details:</h2>
-    <form method = "post">
-        <input type="hidden" name="account" value = "{{ user }}">
-        <table>
-            {{ form }}
-        </table>
-        {% csrf_token %}
-        <button type = "submit" class = "btn btn-dark"> Post</button>
-    </form>
+    <div class="text-center justify-content-center align-items-center d-flex flex-column" >  
+        <p class = "fs-2">Enter your watch party details: </p>
+        <form method = "post">
+            <input type="hidden" name="account" value = "{{ user }}">
+            <table>
+                {{ form }}
+                <br>
+            </table>
+            <br>
+            {% csrf_token %}
+            <button type = "submit" class = "btn btn-dark"> Post</button>
+        </form>
+    </div>
+   
 </body>
 </html>
