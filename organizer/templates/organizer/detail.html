@@ -8,30 +8,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<div class="d-flex flex-column align-items-center justify-content-center">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand">WatchParty</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="{% url 'organizer:login' %}" role="button">Home</a>
+            
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Watchparties
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
+                        <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+                      
+                    </ul>
+                </li>
+                <a class="nav-link favorites" aria-current="page" href="{% url 'organizer:favorites' %}" role="button"> Favorites </a>
+
+            </div>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome, {{user}}</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
     <!-- CHECK IF USER IS ALLOWED TO VIEW THIS PAGE -->
     <head>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light ms-auto">
-            <a class="btn btn-secondary md" href="{% url 'organizer:login' %}" role="button">Home</a>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="watchpartyDropDown" data-bs-toggle="dropdown" aria-expanded="false">
-                Watchparties
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="watchparties">
-                <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
-                <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
-              </ul>
-            </div>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropDown" data-bs-toggle="dropdown" aria-expanded="false">
-                Account
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="account">
-                <li><a class="dropdown-item" href="{% url 'organizer:favorites' %}">Favorites</a></li>
-                <li><a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a></li>
-              </ul>
-            </div>
-        </nav>
+        <div class="d-flex flex-column align-items-center justify-content-center">
         {% if user in allowedUsers %}
             <!-- WATCH PARTY BASIC INFO -->
             <div class="container border">
@@ -55,6 +71,18 @@
         {% else %}
             <p class="display-1 text-center"> No Permissions To View This Watchparty </p>
         {% endif %}
+        </div>
+        <style>      
+            /* Some custom styles*/
+            .main-content{
+                min-height: 230px;
+                background: #dbdfe5;
+            }
+            .sidebar-content{
+                min-height: 230px;
+                background: #b4bac0;
+            }
+        </style>
     </head>
     <body>
 
@@ -122,8 +150,11 @@
                             </div>
                         {% endif %}
                 {% endif %}
-
-                <div class="d-flex flex-column align-items-center justify-content-center border">
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="main-content">
+                <!--<div class="d-flex flex-column align-items-center justify-content-center border">-->
                     <!-- LIST OF ADDED USERS -->
                     <p class="h1 text-center">Added Users:</p>
                     {% for account in watchparty.addeduser_set.all %}
@@ -170,6 +201,7 @@
                         <button class="btn btn-primary" type="submit"> Add Friend Group </button>
                     </form>
                 </div>
+                </div>
                 <!-- Creating Friend Group-->
                 <!--<h2> Creating a Friend Group: </h2>
                 <form method="POST" action="{% url 'organizer:createFriendGroup' %}">
@@ -180,8 +212,10 @@
                     <button type = "submit" > Create Friend Group </button>
                 </form>-->
 
+                <div class="col-sm-6">
+                    <div class="sidebar-content">
                 <!-- SHOW USER'S AVAILABILITY RANGES -->
-                <h1>Availability Ranges:</h1>
+                <h1 class="h1 text-center">Availability Ranges:</h1>
                 <div>
                 <form method="POST" action = "{% url 'organizer:rmAvilRange' %}" >
                     {% csrf_token %}
@@ -211,10 +245,15 @@
                 End Time: {{ sharedRange.1 }}
 
                 {% endif %}
+                </div>
+                </div>
 
-
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="sidebar-content">
                 <!-- VOTE FOR AN EXISTING MOVIE -->
-                <h1>Vote for a Movie to Watch: </h1>
+                <h1 class="h1 text-center">Vote for a Movie to Watch: </h1>
                 <form method="POST" action = "{% url 'organizer:addMovie' %}" >
                     {% csrf_token %}
                     {% for key, value in search.items %}
@@ -232,9 +271,13 @@
                     <button class="btn btn-primary" name = "vote" type="submit"> Vote! </button>
                     <button class="btn btn-primary" name = "rmVote" type="submit"> Remove Vote </button>
                 </form>
+                </div>
+                </div>
 
+                <div class="col-sm-6">
+                    <div class="main-content">
                 <!-- ADD MORE MOVIES -->
-                <h1>Add more movies</h1>
+                <h1 class="h1 text-center">Add more movies:</h1>
 
                 <!-- ADD VIA MANUAL INPUT -->
                 <h2>Manually add Movie:</h2>
@@ -278,6 +321,13 @@
                     <input type="hidden" name="userID" value = "{{ user.id }}">
                     <button class="btn btn-primary" type="submit"> Add Movie </button>
                 </form>
+                </div>
+                </div>
+                </div>
+
+                <p></p>
+                <div class="row">
+                    <div class="col-sm-6">
             <!-- ADD A NEW COMMENT -->
             <h2>Add a Comment:</h2>
                 <form method="POST" action = "{% url 'organizer:getComment' %}" >
@@ -288,7 +338,9 @@
                     <input type="hidden" name="userID" value = "{{ user.id }}">
                     <button class="btn btn-primary" type = "submit" > Add Comment </button>
                 </form>
-
+                </div>
+                    <div class="col-sm-6">
+                        <div class="main-content">
             <!-- VIEW COMMENTS, ABLE TO DELETE YOUR OWN -->
             <h2>Comments:</h2>
                 {% for c in comments %}
@@ -303,6 +355,9 @@
                     {% endif %}
                     </fieldset>
                 {% endfor %}
+                </div>
+                </div>
+                </div>
             <!-- LEAVE WATCHPARTY -->
             {% if watchparty.account.username != user.username %}
                 <form method="POST" action="{% url 'organizer:kickUser' %}">
@@ -322,5 +377,4 @@
             </div>
         </div>
     </footer>
-</div>
 </html>
