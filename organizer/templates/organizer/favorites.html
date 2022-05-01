@@ -70,13 +70,26 @@ Account
 <meta charset="UTF-8">
 <!-- <p class = "fs-2"> {{user}}'s List of Favorited Movies </p> 
 <h1 class = "text-center"> {{user}}'s List of Favorited Movies</h1> -->
+<style>      
+    /* Some custom styles*/
+    .main-content{
+        min-height: 230px;
+        background: #dbdfe5;
+    }
+    .sidebar-content{
+        min-height: 230px;
+        background: #b4bac0;
+    }
+</style>
 </head>
 <body>
 
 
-<div class = "container">
-    <div class = "row">
-            <h1> My Favorites</h1>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="main-content">
+                    <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> My Favorites</h1>
 
             {% if messages %}
             <ul class="messages">
@@ -107,8 +120,10 @@ Account
             </div>
             </form>
         </div>
-    <div class = "row">
-        <h1>Add more favorite movies</h1>
+        </div>
+        <div class="col-sm-6">
+            <div class="sidebar-content">
+                <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> Add More Favorite Movies</h1>
 
         <!-- ADD VIA MANUAL INPUT -->
         <!-- <h2>Manually Add:</h2> -->
@@ -170,7 +185,7 @@ Account
         
         
         </div>
-    
+        </div>
 </div>
 
 
