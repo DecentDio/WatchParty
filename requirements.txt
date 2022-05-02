@@ -17,4 +17,4 @@ cinemagoer
 
 django-bootstrap-v5
 
-
+Pillow
