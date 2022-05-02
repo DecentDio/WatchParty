@@ -180,7 +180,7 @@
                     <!-- LIST OF ADDED USERS -->
                     <p class="h1 text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;">Added Users:</p>
                     {% for account in watchparty.addeduser_set.all %}
-                        <p style="padding: 1px 10px 1px 10px">{{ account.account }},</p> 
+                        <p style="padding: 1px 10px 1px 10px">{{ account.account }}</p> 
                     {% endfor %}
                     <!-- INVITE NEW USERS -->
                     <h2 style="padding: 10px 10px 10px 10px">Invite User:</h2>
@@ -300,9 +300,10 @@
                 <!-- Show the optimal range of times to have a watch party-->
                 <h1 class="text-center"> Shared Availability Range</h1>
                 {% if sharedRange|length > 0 %}
+                <h4 class="parent" style="text-shadow: 1px 1px 5px whitesmoke;">
                 Start Time: {{ sharedRange.0 }} <br>
                 End Time: {{ sharedRange.1 }}
-
+                </h4>
                 {% endif %}
                 </div>
                 </div>
