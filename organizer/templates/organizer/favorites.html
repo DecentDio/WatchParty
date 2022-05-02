@@ -91,13 +91,13 @@ Account
               <!--  <div class="main-content">--> 
                     <h1 style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> My Favorites</h1>
 
-            {% if messages %}
+            <!-- {% if messages %}
             <ul class="messages">
             {% for message in messages %}
                 <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
             </ul>
-            {% endif %}
+            {% endif %} -->
 
             <form method="POST" action = "{% url 'organizer:rmFav' %}" >
             {% csrf_token %}
