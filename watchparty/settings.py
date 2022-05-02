@@ -29,13 +29,13 @@ SECRET_KEY = 'django-insecure-162*_fhrv$be1k*12tbquawrpd^$n7-lp-zw!f(y+sqy)wfp7^
 ALLOWED_HOSTS = ['localhost','127.0.0.1','b22-watch-party.herokuapp.com']
 
 # SECURITY STUFF, SET TO FALSE AND 0 WHEN RUNNING LOCALLY! 
-
+''' 
 SECURE_SSL_REDIRECT= True
 SECURE_HSTS_SECONDS = 31536000
 '''
 SECURE_SSL_REDIRECT = False
 SECURE_HSTS_SECONDS = 0
-'''
+
 
 # Application definition
 

@@ -85,59 +85,75 @@ Account
 <body>
 
 
-    <div class="container mt-3">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm">
+            <div class="col">
               <!--  <div class="main-content">--> 
-                    <h1 style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> My Favorites</h1>
+                <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> My Favorites</h1>
 
-            <!-- {% if messages %}
+           {% if messages %}
             <ul class="messages">
             {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+            {% endif %}
             {% endfor %}
             </ul>
-            {% endif %} -->
+            {% endif %} 
 
-            <form method="POST" action = "{% url 'organizer:rmFav' %}" >
-            {% csrf_token %}
-            {% for key,val in favorites.items %}
-            <div class = "btn-group-vertical" role = "group" aria-label = "Basic radio toggle button group">
-            <input type="radio" class = "btn-check" id="{{ key.movie }}" name="movies" value="{{ key.movie }}" autocomplete="off" checked>
-            <label class = "btn btn-outline-secondary" for="{{ key.movie }}"> "{{key.movie}}"</label>
-            {% if val|length > 0 %}
-                ----- Also Favorited By:
-                {% for sameTaster in val %}
-                    {{ sameTaster.account }}, 
-                {% endfor %}
-                
-            {% endif %}
+                <form method="POST" action = "{% url 'organizer:rmFav' %}" >
+                    {% csrf_token %}
+                    <div class = "d-flex justify-content-center btn-group-vertical gap-1" role = "group" aria-label = "Basic radio toggle button group">
+                        {% for key,val in favorites.items %}
+                            <input type="radio" class = "btn-check" id="{{ key.movie }}" name="movies" value="{{ key.movie }}" autocomplete="off">
+                            <label class = "btn btn-outline-secondary" for="{{ key.movie }}"> "{{key.movie}}"</label>
+                            {% if val|length > 0 %}
+                                 ----- Also Favorited By:
+                                {% for sameTaster in val %}
+                                     {{ sameTaster.account }}, 
+                                 {% endfor %}
+                    
+                             {% endif %}
 
-            {% endfor %}
-            <br>
-            <input type="hidden" name="userID" value = "{{ user.id }}">
-            <button type = "submit" > Remove Favorite </button>
-            </div>
-            </form>
+                         {% endfor %}
+                <br>
+                        <div class = "text-center">
+                            <input type="hidden" name="userID" value = "{{ user.id }}">
+                            <button class = "text-center" type = "submit" > Remove Favorite </button>
+                        </div>
+                    </div>
+                 </form>
         <!-- </div> -->
-        </div>
-        <div class="col-sm">
-            <div class="sidebar-content">
+             </div>
+
+        <div class="col">
+          <!--   <div class="sidebar-content"> -->
                 <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> Add More Favorite Movies</h1>
 
         <!-- ADD VIA MANUAL INPUT -->
         <!-- <h2>Manually Add:</h2> -->
         
         <form method="POST" action = "{% url 'organizer:addFav' %}">
-            <div class="mb-3">
-                <label for="addMovies" class="form-label"> Manually Add Your Movie</label>
-                <br>
-                <input id="movies" type="text" name="movies" placeholder="Enter movie name" >
-                <input type="hidden" name="userID" value = "{{ user.id }}">
-                <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+            <div class = "d-flex justify-content-center">
+                <div class="mb-3">
+                    <label for="addMovies" class="form-label"> Manually Add Your Movie</label>
+                    <br>
+                    <input id="movies" type="text" name="movies" placeholder="Enter movie name" >
+                    <input type="hidden" name="userID" value = "{{ user.id }}">
+                    <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+                
+                <div class = "col-md-12 text-center">
+                    <button class = "text-center" type="submit" >Add movie</button>
+                </div> 
+               
+                
+                </div>
+                </form>
+                
+
             </div>
-            <button type="submit" >Add movie</button>
-            </form>
+      
         
         
         <!-- <form method="POST" action = "{% url 'organizer:addFav' %}" >
@@ -151,16 +167,27 @@ Account
         <br>
         
         <form method="GET" action="{% url 'organizer:favorites' %}">
-            <div class="mb-3">
-                <label for="searchMovies" class="form-label"> Search Your Movie</label>
-                <br>
-                <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
-                <!--<input type="hidden" name="userID" value = "{{ user.id }}"> -->
-                <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+            <div class = "d-flex justify-content-center">
+                <div class="mb-3">
+                    <label for="searchMovies" class="form-label"> Search Your Movie</label>
+                    <br>
+                    <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
+                    <!--<input type="hidden" name="userID" value = "{{ user.id }}"> -->
+                    <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+
+                    
+                    <div class ="text-center">
+                       
+                        <button class = "text-center" id= "search_submit" type ="submit" >Search</button>
+                    </div> 
+
+                </div>
+
+               
+
+               
+                </form>
             </div>
-            <button id= "search_submit" type ="submit" >Search</button>
-            </form>
-        
         
         <!-- <h2>Search:</h2>
         <form method="GET" action="{% url 'organizer:favorites' %}">
@@ -168,7 +195,7 @@ Account
             <button id= "search_submit" type ="submit" >Search</button>
         </form> -->
         
-        
+        <div class = "d-flex justify-content-center">
         {% if searchResults|length > 1 %}
         <form method="POST" action = "{% url 'organizer:addFav' %}" >
             {% csrf_token %}
@@ -184,9 +211,11 @@ Account
         {% endif %}
         
         
+            </div>
         </div>
-        </div>
+    </div>
 </div>
+
 
 
 

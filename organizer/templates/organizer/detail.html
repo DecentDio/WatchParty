@@ -60,13 +60,17 @@
                 <div class="row">
                     <p class="h3 text-center"> {{watchparty.start_date}} - {{watchparty.end_date}}</p>
                 </div>
-                {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li {% if message.tags %} class="{{ message.tags }} text-center"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+                
+                    {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }} </li>
+            {% endif %}
+            {% endfor %}
+            </ul>
+            {% endif %} 
             </div>
         {% else %}
             <p class="display-1 text-center"> No Permissions To View This Watchparty </p>
