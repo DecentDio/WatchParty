@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from .forms import CreateWatchParty, CreateAddedUser, CreateAvailabilityRange, CreateMovieSearch, CreateComment, DateTimeForm
 from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie, FinalizedWatchparty, FriendGroup, FriendGroupMember
+from .models import Watchparty, MovieSearcher, ListOfMovies, AddedUser, Comment, AvailabilityRange, FavoriteMovie, FinalizedWatchparty, FriendGroup, FriendGroupMember, Images
 from django.urls import reverse
 from django.utils import timezone
 from collections import Counter
@@ -289,3 +289,10 @@ def deleteComment(request):
     watchpartyID = comment.watchparty.id
     comment.delete()
     return HttpResponseRedirect(reverse('organizer:detail', args=(watchpartyID,)))
+
+def HomeView(request):
+    obj = Images.objects.all()
+    context = {
+        'obj':obj
+    }
+    return render(request, 'login.html', context)

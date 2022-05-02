@@ -79,3 +79,11 @@ class Comment(models.Model):
     pub_date = models.DateTimeField('date published')
     def __str__(self):
         return self.account.username + "'s comment in " + self.watchparty.title_text + " on " + self.pub_date
+
+class Images(models.Model):
+    image = models.ImageField(upload_to = 'pics/%y/%m/%d/')
+    title = models.CharField(max_length = 150)
+    sub_title = models.CharField(max_length = 100)
+
+    def __Str__(self):
+        return self.title

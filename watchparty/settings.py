@@ -68,6 +68,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'watchparty.urls'
 
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
