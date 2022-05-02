@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load socialaccount %}
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    <h2>Enter availiability:</h2>
+    <div class="text-center">
+        <h1>Enter availiability:</h1>
     <form method = "post">
         <input type="hidden" name="watchpartyID" value = "{{ watchpartyID }}">
         <input type="hidden" name="userID" value = "{{ userID }}">
+        
+        <div class="center"
         <table>
             {{ form }}
         </table>
+    </div>
         {% csrf_token %}
+        <br>
         <button type = "submit" class = "btn btn-dark"> Post</button>
     </form>
+    </div>
 </body>
 </html>
