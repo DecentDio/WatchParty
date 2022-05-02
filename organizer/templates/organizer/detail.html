@@ -11,14 +11,12 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a href="#" class="navbar-brand">WatchParty</a>
+        <a href="{% url 'organizer:login' %}" class="navbar-brand">WatchParty</a>
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="{% url 'organizer:login' %}" role="button">Home</a>
-            
+        <div class="collapse navbar-collapse" id="navbarCollapse"> 
+            <div class="navbar-nav">            
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Watchparties
@@ -34,7 +32,7 @@
             </div>
             <div class="navbar-nav ms-auto">
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome, {{user}}</a>
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hi {{user}}</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'organizer:logout' %}">Logout</a>
                     </div>
@@ -55,7 +53,7 @@
                     <p class="display-3 text-center"> Party: {{ watchparty.title_text }}</p>
                 </div>
                 <div class="row">
-                    <p class="h1 text-center"> Host: {{ watchparty.account }} </p>
+                    <p class="h2 text-center"> Host: {{ watchparty.account }} </p>
                 </div>
                 <div class="row">
                     <p class="h3 text-center"> {{watchparty.start_date}} - {{watchparty.end_date}}</p>
