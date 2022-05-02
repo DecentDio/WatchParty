@@ -88,9 +88,27 @@
             <p class="display-1 text-center"> Watch Party Organizer</p>
             <p class="display-5 text-center"> Welcome, {{ user.username }} </p>
             <div class="container">
-                <div class="row">
-                    <a class="btn btn-primary md" href="{% url 'organizer:watchparties' %}" role="button">My Watchparties</a>
+                <div class = "row">
+                    <div class = "d-flex justify-content-center btn-group-vertical gap-1" role = "group" aria-label = "Basic radio toggle button group">
+                        <input type="radio" class = "btn-check" autocomplete="off">
+                        <a class = "btn btn-dark" href = "{% url 'organizer:form' %}" role = "button"> Create a watch party to coordinate a time to watch a movie with friends</a>
+
+                    </div>
                 </div>
+                
+                <br>
+
+                <div class="row">
+                    <a class="btn btn-dark md gap-3" href="{% url 'organizer:watchparties' %}" role="button">Edit party details, finalize a movie, and invite friends to your party</a>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <a class="btn btn-dark md gap-3" href="{% url 'organizer:favorites' %}" role="button">Add your favorite movies/TV shows to easily make your next watch party</a>
+                </div>
+
+
             </div>
 
 
