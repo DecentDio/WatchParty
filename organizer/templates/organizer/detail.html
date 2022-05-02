@@ -48,7 +48,7 @@
         <div class="d-flex flex-column align-items-center justify-content-center">
         {% if user in allowedUsers %}
             <!-- WATCH PARTY BASIC INFO -->
-            <div class="container border">
+            <div class="container" style="border-style: outset; border-width: 6px">
                 <div class="row border">
                     <p class="display-3 text-center"> Party: {{ watchparty.title_text }}</p>
                 </div>
@@ -79,10 +79,21 @@
             .main-content{
                 min-height: 230px;
                 background: #dbdfe5;
+                border-style: outset;
+                border-width: 6px;
             }
             .sidebar-content{
                 min-height: 230px;
                 background: #b4bac0;
+                border-style: outset;
+                border-width: 6px;
+            }
+            .parent {
+                display: grid;
+                place-items: center;
+            }
+            .outset{
+                border-style: outset;
             }
         </style>
     </head>
@@ -141,12 +152,13 @@
                                 </div>
                             </form>
                         {% else %}
+                            <br>
                             <div class="d-flex justify-content-center">
                                 <div>
                                     <form type="get" action=".">
                                         <input type="hidden" name="editFin" value = 1>
                                         <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                                        <button id= "edit_submit" class="btn btn-primary" type="submit"> Edit Party </button>
+                                        <button id= "edit_submit" class="btn btn-info" type="submit"> Edit and Finalize Party </button>
                                     </form>
                                 </div>
                             </div>
@@ -160,12 +172,12 @@
 
                 <!--<div class="d-flex flex-column align-items-center justify-content-center border">-->
                     <!-- LIST OF ADDED USERS -->
-                    <p class="h1 text-center">Added Users:</p>
+                    <p class="h1 text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;">Added Users:</p>
                     {% for account in watchparty.addeduser_set.all %}
-                        {{ account.account }},
+                        <p style="padding: 1px 1px 10px 10px">{{ account.account }},</p> 
                     {% endfor %}
                     <!-- INVITE NEW USERS -->
-                    <h2>Invite User:</h2>
+                    <h2 style="padding: 10px 10px 10px 10px">Invite User:</h2>
                     <form method="POST" action="{% url 'organizer:addUser' %}">
                         {% csrf_token %}
                         <select name="userID" id="userID">
@@ -173,13 +185,13 @@
                                 <option value="{{user.id}}">{{user.username}}</option>
                             {% endfor %}
                         </select>
-                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                        <button class="btn btn-primary" type="submit"> Add User </button>
+                        <input type="hidden" class="parent" name="watchpartyID" value = "{{ watchparty.id }}">
+                        <button class="btn btn-primary" type="submit" class="align-items-center"> Add User </button>
                     </form>
 
                     <!-- KICK USERS IF YOU ARE OWNER -->
                     {% if user == watchparty.account %}
-                    <h2>Kick User:</h2>
+                    <h2 style="padding: 10px 10px 10px 10px">Kick User:</h2>
                     <form method="POST" action="{% url 'organizer:kickUser' %}">
                         {% csrf_token %}
                         <select name="kickedUserID" id="kickedUserID">
@@ -187,13 +199,13 @@
                                 <option value="{{user.id}}">{{user.username}}</option>
                             {% endfor %}
                         </select>
-                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                        <button class="btn btn-primary" type="submit"> Kick User </button>
+                        <input type="hidden" style="padding: 10px 10px 10px 10px" name="watchpartyID" value = "{{ watchparty.id }}">
+                        <button class="btn btn-primary" type="submit" style="padding: 10px 10px 10px 10px"> Kick User </button>
                     </form>
                     {% endif %}
 
                     <!-- Adding a friend group-->
-                    <h2>Add Friend Group:</h2>
+                    <h2 style="padding: 10px 10px 10px 10px">Add Friend Group:</h2>
                     <form method="POST" action="{% url 'organizer:addFriendGroup' %}">
                         {% csrf_token %}
                         <select name="fgID" id="friendGroupSelect">
@@ -201,8 +213,8 @@
                                 <option value="{{fg.id}}">{{fg.group_name}}</option>
                             {% endfor %}
                         </select>
-                        <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                        <button class="btn btn-primary" type="submit"> Add Friend Group </button>
+                        <input type="hidden" style="padding: 10px 10px 10px 10px" name="watchpartyID" value = "{{ watchparty.id }}">
+                        <button class="btn btn-primary" style="padding: 10px 10px 10px 10px" type="submit"> Add Friend Group </button>
                     </form>
                 </div>
                 </div>
@@ -220,7 +232,7 @@
                     <div class="sidebar-content">
 
                 <!-- SHOW USER'S AVAILABILITY RANGES -->
-                <h1 class="h1 text-center">Availability Ranges:</h1>
+                <h1 class="h1 text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;">Availability Ranges:</h1>
                 <div>
                 <form method="POST" action = "{% url 'organizer:rmAvilRange' %}" >
                     {% csrf_token %}
@@ -245,7 +257,7 @@
                 </form>
                 </div>
                 <!-- Show the optimal range of times to have a watch party-->
-                <h1> Shared Availability Range</h1>
+                <h1 class="text-center"> Shared Availability Range</h1>
                 {% if sharedRange|length > 0 %}
                 Start Time: {{ sharedRange.0 }} <br>
                 End Time: {{ sharedRange.1 }}
@@ -259,7 +271,7 @@
                         <div class="col-sm-6">
                             <div class="sidebar-content">
                 <!-- VOTE FOR AN EXISTING MOVIE -->
-                <h1 class="h1 text-center">Vote for a Movie to Watch: </h1>
+                <h1 class="h1 text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;">Vote for a Movie to Watch: </h1>
                 <form method="POST" action = "{% url 'organizer:addMovie' %}" >
                     {% csrf_token %}
                     {% for key, value in search.items %}
@@ -283,10 +295,10 @@
                 <div class="col-sm-6">
                     <div class="main-content">
                 <!-- ADD MORE MOVIES -->
-                <h1 class="h1 text-center">Add more movies:</h1>
+                <h1 class="h1 text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;">Add More Movies:</h1>
 
                 <!-- ADD VIA MANUAL INPUT -->
-                <h2>Manually add Movie:</h2>
+                <h2 style="padding: 10px 10px 10px 10px" >Manually add movie:</h2>
                 <form method="POST" action = "{% url 'organizer:addMovie' %}" >
                     {% csrf_token %}
                     <input id="movies" type="text" name="movies" placeholder="Manually add Movie" >
@@ -296,7 +308,7 @@
                 </form>
 
                 <!-- ADD VIA SEARCHING -->
-                <h2>Search for a movie:</h2>
+                <h2 style="padding: 10px 10px 10px 10px">Search for a movie:</h2>
                 <form type="get" action=".">
                     <input id="search_box" type="text" name="search_box" placeholder="Search for a Movie" >
                     <button class="btn btn-primary" type="submit" id="search_submit"> Search </button>
@@ -316,7 +328,7 @@
                 {% endif %}
 
                 <!-- ADD FROM YOUR FAVORITES -->
-                <h2>Add From Your Favorites: </h2>
+                <h2 style="padding: 10px 10px 10px 10px" >Add From Your Favorites: </h2>
                 <form method="POST" action = "{% url 'organizer:addMovie' %}" >
                     {% csrf_token %}
                     {% for fav in user.favoritemovie_set.all %}
@@ -348,7 +360,7 @@
                     <div class="col-sm-6">
                         <div class="main-content">
             <!-- VIEW COMMENTS, ABLE TO DELETE YOUR OWN -->
-            <h2>Comments:</h2>
+            <h2 style="padding: 10px 10px 10px 10px">Comments:</h2>
                 {% for c in comments %}
                     <fieldset>
                     {{ c.account }} : {{ c.text }} -------------- Posted {{ c.pub_date }}
