@@ -118,9 +118,9 @@ def DetailView(request, pk):
 def searchMovie(searchTerm):
     ia = Cinemagoer()
     searchResultsObjects = ia.search_movie(searchTerm)
-    searchResults = []
+    searchResults = set()
     for i in range(len(searchResultsObjects)):
-        searchResults.append(searchResultsObjects[i]["title"])
+        searchResults.add(searchResultsObjects[i]["title"])
     return searchResults
 
 def getAllowedUsers(watchparty):
