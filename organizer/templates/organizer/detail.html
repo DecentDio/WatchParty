@@ -74,6 +74,21 @@
             <p class="display-1 text-center"> No Permissions To View This WatchParty </p>
         {% endif %}
         </div>
+
+        <script>
+            function popUpConfirmLeave() {
+              var myPopupLeave = new bootstrap.Modal(document.getElementById("popUpLeave"));
+              myPopupLeave.show();
+            }
+            function popUpMessageDelete() {
+              var myPopupMessage = new bootstrap.Modal(document.getElementById("popUpMessage"));
+              myPopupMessage.show();
+            }
+            function popUpConfirmKick() {
+              var myPopupKick = new bootstrap.Modal(document.getElementById("popUpKick"));
+              myPopupKick.show();
+            }
+            </script>
         <style>      
             /* Some custom styles*/
             .main-content{
@@ -209,8 +224,22 @@
                             {% endfor %}
                         </select>
                         <input type="hidden" style="padding: 10px 10px 10px 10px" name="watchpartyID" value = "{{ watchparty.id }}">
-                        <button class="btn btn-primary" type="submit" style="padding: 10px 10px 10px 10px"> Kick User </button>
-                        </div>
+                        <button class="btn btn-danger" type="button" style="padding: 10px 10px 10px 10px" onclick="popUpConfirmKick()"> Kick User </button>
+                        <div id="popUpKick" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Are You Sure You Want To Remove This User From The Party?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Remove User</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
                     </form>
                     {% endif %}
 
@@ -261,7 +290,7 @@
                     </div>
                     <div class="parent">
                     <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                    <button class="btn btn-primary" type="submit"> Remove Selected Range </button>
+                    <button class="btn btn-danger" type="submit"> Remove Selected Range </button>
                     </div>
                 </form>
                 <br>
@@ -342,7 +371,7 @@
                     <input type="hidden" name="userID" value = "{{ user.id }}">
                     <div class="text-center">
                     <button class="btn btn-primary" name = "vote" type="submit"> Vote! </button>
-                    <button class="btn btn-primary" name = "rmVote" type="submit"> Remove Vote </button>
+                    <button class="btn btn-danger" name = "rmVote" type="submit"> Remove Vote </button>
                 </div>
                 </form>
                 </div>
@@ -415,6 +444,7 @@
                     <div class="parent">
                     <button class="btn btn-primary" type="submit"> Add Movie From Favorites</button>
                     </div>
+                    <br>
                 </form>
                 
                 </div>
@@ -433,7 +463,21 @@
                             <form method="POST" action = "{% url 'organizer:deleteComment' %}" >
                                 {% csrf_token %}
                                 <input type="hidden" name="commentID" value = "{{ c.id }}">
-                                <button class="btn btn-danger" type = "submit" style="float:right"> Delete </button>
+                                <button class="btn btn-danger" type = "button" style="float:right" onclick="popUpMessageDelete()"> Delete Comment</button>
+                                <div id="popUpMessage" class="modal fade" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete This Comment?</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger">Delete Comment</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         {% endif %}
                         </fieldset>
@@ -447,7 +491,25 @@
                     {% csrf_token %}
                     <input type="hidden" name="kickedUserID" value = "{{ user.id }}">
                     <input type="hidden" name="watchpartyID" value = "{{ watchparty.id }}">
-                    <button class="btn btn-danger" type = "submit" > Leave WatchParty </button>
+                    <button class="btn btn-danger" type = "button" onclick="popUpConfirmLeave()"> Leave WatchParty </button>
+                    <div id="popUpLeave" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Leaving So Soon? :(</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are You Sure You Would Like To Leave This WatchParty?</p>
+                                    <p class="text-secondary"><small>You won't be able to join back in unless you are invited again!</small></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Leave</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             {% endif %}
         <!-- IF NOT AN ALLOWED USER, NO PERMS -->
