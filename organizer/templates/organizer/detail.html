@@ -191,9 +191,13 @@
                         <!--<div class="d-flex flex-column align-items-center justify-content-center border">-->
                         <!-- LIST OF ADDED USERS -->
                             <p class="h1 text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;">Added Users:</p>
-                            {% for account in watchparty.addeduser_set.all %}
-                                <p style="padding: 1px 10px 1px 10px">{{ account.account }}</p>
-                            {% endfor %}
+                            <div class="d-flex flex-wrap justify-content-center">
+                                {% for account in watchparty.addeduser_set.all %}
+                                    <div style="padding: 10px 10px 10px 10px">
+                                        {{ account.account }}
+                                    </div>
+                                {% endfor %}
+                            </div>
                             <!-- INVITE NEW USERS -->
                             <h2 style="padding: 10px 10px 10px 10px">Invite User:</h2>
                             <form method="POST" action="{% url 'organizer:addUser' %}">
