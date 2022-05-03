@@ -450,28 +450,33 @@
                                 <h2>Comments:</h2>
                                 {% for c in comments %}
                                     <fieldset>
-                                    {{ c.account }} : {{ c.text }} -------------- Posted {{ c.pub_date }}
-                                    {% if c.account == user %}
-                                        <form method="POST" action = "{% url 'organizer:deleteComment' %}" >
-                                            {% csrf_token %}
-                                            <input type="hidden" name="commentID" value = "{{ c.id }}">
-                                            <button class="btn btn-danger" type = "button" style="float:right" onclick="popUpMessageDelete()"> Delete Comment</button>
-                                            <div id="popUpMessage" class="modal fade" tabindex="-1">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Delete This Comment?</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                            <button type="submit" class="btn btn-danger">Delete Comment</button>
+                                        <p class="text-justify text-break border border-white border-2 rounded">
+                                            {{ c.account }} : {{ c.text }}
+                                            <br>
+                                            Posted {{ c.pub_date }}
+                                        </p>
+                                        {% if c.account == user %}
+                                            <form method="POST" action = "{% url 'organizer:deleteComment' %}" >
+                                                {% csrf_token %}
+                                                <input type="hidden" name="commentID" value = "{{ c.id }}">
+                                                <button class="btn btn-danger" type = "button" style="float:right" onclick="popUpMessageDelete()"> Delete Comment</button>
+                                                <div id="popUpMessage" class="modal fade" tabindex="-1">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Delete This Comment?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-danger">Delete Comment</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                    {% endif %}
+                                            </form>
+
+                                        {% endif %}
                                     </fieldset>
                                 {% endfor %}
                             </div>
