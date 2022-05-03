@@ -59,12 +59,33 @@ def favoritesView(request):
 def DetailView(request, pk):
     watchparty = Watchparty.objects.get(pk=pk)
     sharedRangesTime = []
-    for range in AvailabilityRange.objects.filter(watchparty = watchparty):
-        sharedRangesTime.append((range.start_time,range.end_time))
+    finalizedWP = None
 
+    allUsers = set()
+    for range in AvailabilityRange.objects.filter(watchparty = watchparty):
+        sharedRangesTime.append([range.start_time,range.end_time,range.account.username])
+        allUsers.add(range.account.username)
     startAndEndRange = []
 
-    finalizedWP = None
+    if len(sharedRangesTime) > 0:
+        sharedRangesTime.sort(key=lambda y: y[0])
+        for i in sharedRangesTime:
+            defaultStartTime = i[0]
+            defaultEndTime = i[1]
+            users = set()
+            for j in sharedRangesTime:
+                if defaultStartTime <= j[1] and j[0] <= defaultEndTime:
+                    users.add(j[2])
+                    if j[0] > defaultStartTime:
+                        defaultStartTime = j[0]
+                    if j[1] < defaultEndTime:
+                        defaultEndTime = j[1]
+            if len(users) == len(allUsers):
+                startAndEndRange.append(defaultStartTime)
+                startAndEndRange.append(defaultEndTime)
+                break
+
+    '''
     if len(sharedRangesTime) > 0:
         defaultStartTime = sharedRangesTime[0][0]
         defaultEndTime = sharedRangesTime[0][1]
@@ -75,7 +96,7 @@ def DetailView(request, pk):
                 defaultEndTime = i[1]
         startAndEndRange.append(defaultStartTime)
         startAndEndRange.append(defaultEndTime)
-
+    '''
     searchResults = []
     editingFin = False
     if "search_box" in request.GET:
