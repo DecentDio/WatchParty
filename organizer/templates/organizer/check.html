@@ -15,11 +15,11 @@
                 <div class="navbar-nav">            
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Watchparties
+                            WatchParties
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
-                            <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+                            <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My WatchParties</a></li>
+                            <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create WatchParty</a></li>
                           
                         </ul>
                     </li>
@@ -80,7 +80,7 @@
 <body>
     <div class="text-center justify-content-center align-items-center d-flex flex-column" >
         <div style="border-style: outset; border-width: 6px;">  
-            <h1 class="h1 text-center cool-blues" style="padding: 10px 10px 10px 10px; text-shadow: 1px 1px 5px whitesmoke;">Enter your watch party details: </h1>
+            <h1 class="h1 text-center cool-blues" style="padding: 10px 10px 10px 10px; text-shadow: 1px 1px 5px whitesmoke;">Enter your WatchParty details: </h1>
         <form method = "post">
             <input type="hidden" name="account" value = "{{ user }}">
             <table>
