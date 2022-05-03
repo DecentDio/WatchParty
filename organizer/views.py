@@ -129,7 +129,9 @@ def GetParty(request):
     if request.method == "POST":
         form = CreateWatchParty(request.POST)
         form.instance.account = request.user
-        form.save()
+        obj = form.save(commit=False)
+        if obj.valid_date_range():
+            obj.save()
         return redirect("/watchparties")
     else:
         form = CreateWatchParty()
