@@ -10,16 +10,12 @@ h1 {
 
 p {
     color: palevioletred;
-    background-color: transparent;
+    /*background-color: transparent;*/
     text-align: center;
     width: 200px;
 }
 
-body {
-    background-image: url("/organizer/static/organizer/images/background.jpg");
-    margin:0;
-    padding:0;
-}
+
 
 
 .mainName {
@@ -39,7 +35,7 @@ body {
    }
    body {
     font-family: cursive;
-    background: white url("images/background.jpg");
+    /*background: white url("images/background.jpg");*/
    }
    a {
     text-decoration: none;

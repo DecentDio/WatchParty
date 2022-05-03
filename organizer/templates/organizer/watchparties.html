@@ -91,14 +91,39 @@
             min-height: 230px;
             background: #b4bac0;
         }
+        .dark-blues {
+            background: #7474BF;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            
+            border: 3px solid #eee;
+            padding: 15px;
+            margin-bottom: 15px;
+        } 
+        .redark-blues {
+            background: #7474BF;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to left, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to left, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            
+            border: 3px solid #eee;
+            padding: 15px;
+            margin-bottom: 15px;
+        } 
+        .btn-cool-blues {
+            background: #2193b0;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            color: #fff;
+            border: 3px solid #eee;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-3">
         <div class="row">
             <div class="col-sm-6">
-                <div class="main-content">
-                    <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> My Watch parties</h1>
+                <div class="main-content" style="border-style: outset; border-width: 6px;">
+                    <h1 class = "text-center dark-blues" style="padding: 10px 10px 10px 10px; background-color: whitesmoke; text-shadow: 1px 1px 5px whitesmoke;"> My Watch parties</h1>
                     {% if watchparties_list %}
                         <div class="m-4">
                             <ul class = "list-group">
@@ -144,8 +169,8 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="sidebar-content">
-                    <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> Watchparties I'm In </h1>
+                <div class="sidebar-content" style="border-style: outset; border-width: 6px;">
+                    <h1 class = "text-center redark-blues" style="padding: 10px 10px 10px 10px; background-color: whitesmoke; text-shadow: 1px 1px 5px whitesmoke;"> Watchparties I'm In </h1>
                     {% if invitedWatchParties %}
                         <ul class = "list-group">
                             {% for invitedParty in invitedWatchParties %}
@@ -157,7 +182,10 @@
                     {% endif %}
                 </div>
             </div>
-            <button type="button" class="btn btn-info" onclick= "location.href='{% url 'organizer:form' %}'">Create WatchParty</button>
+            <div>
+                <br>
+            </div>
+            <button type="button" class="btn btn-cool-blues" onclick= "location.href='{% url 'organizer:form' %}'">Create WatchParty</button>
             
         </div>
     </div>
