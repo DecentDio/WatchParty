@@ -13,16 +13,76 @@
     <head>
       
 
-        <title>Google Registration</title>
+        <title>Welcome</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <!--
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         -->
+    <style>
+        .frontbox{
+            padding: 15px;
+            background: #dbdfe5;
+            margin-bottom: 15px;
+        }
+        .btn-sq-lg {
+            width: 150px !important;
+            height: 150px !important;
+        }
+
+        .btn-sq {
+  width: 100px !important;
+  height: 100px !important;
+  font-size: 10px;
+        }
+
+.btn-sq-sm {
+  width: 50px !important;
+  height: 50px !important;
+  font-size: 10px;
+}
+
+.btn-sq-xs {
+  width: 25px !important;
+  height: 25px !important;
+  padding:2px;
+}
+
+
+.btn-cool-blues {
+    background: #2193b0;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #fff;
+    border: 3px solid #eee;
+}
+
+.btn-dark-blue {
+    background: #7474BF;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #fff;
+    border: 3px solid #eee;
+}
+
+.btn-funky-moon {
+    background: #A770EF;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: whitesmoke;
+    border: 3px solid #eee;
+}
+
+    </style>
+    
     </head>
 
    
 
-    <body>
+    <body background-image="organizer/static/organizer/images/background.jpg">
         
         <!--
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -116,7 +176,39 @@
 
             </div>
             -->
+            <div class="container mt-3">
+                <div class="row">
+                    <div class="col-lg-4" >
+                        <!--<h2>Watch a movie or show from home</h2>-->
+                        <div class="frontbox" style="border-style: outset; border-width: 6px;">
+                        <a class = "btn btn-cool-blues" href = "{% url 'organizer:form' %}" role = "button" style="font-size: xx-large; text-shadow: 1px 1px 3px whitesmoke;"> 
+                            <i class="bi-calendar-week" ></i>
+                            <br>
+                            Create a WatchParty Plan!</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!--<h2>Invite friends and finalize a movie to watch together</h2>-->
+                        <div class="frontbox" style="border-style: outset; border-width: 6px;">
+                        <a class="btn btn-dark-blue" href="{% url 'organizer:watchparties' %}" role="button" style="font-size: xx-large; text-shadow: 1px 1px 3px whitesmoke;"> 
+                            <i class="bi-chat-left-dots" ></i>
+                            <br>
+                            Select a WatchParty To Edit And Finalize!</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!--<h2>Add your favorite movies and TV shows</h2>-->
+                        <div class="frontbox" style="border-style: outset; border-width: 6px;">
+                        <a class="btn btn-funky-moon" href="{% url 'organizer:favorites' %}" role="button" style="font-size: xx-large; text-shadow: 1px 1px 3px whitesmoke;">
+                            <i class="bi-list-stars" ></i>
+                            <br>
+                            Add To Your Movie Wish List!</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
 
+<!--
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
   
@@ -154,9 +246,37 @@
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
-              
-  
-
+            -->     
+            
+<!--
+                <div class="container">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <p>
+                          <a href="#" class="btn btn-sq-lg btn-primary">
+                              <i class="fa fa-user fa-5x"></i><br/>
+                              Demo Primary <br>Button
+                          </a>
+                          <a href="#" class="btn btn-sq-lg btn-success">
+                            <i class="fa fa-user fa-5x"></i><br/>
+                            Demo Success <br>Button
+                          </a>
+                          <a href="#" class="btn btn-sq-lg btn-info">
+                            <i class="fa fa-user fa-5x"></i><br/>
+                            Demo Info <br>Button
+                          </a>
+                          <a href="#" class="btn btn-sq-lg btn-warning">
+                            <i class="fa fa-user fa-5x"></i><br/>
+                            Demo Warning <br>Button
+                          </a>
+                          <a href="#" class="btn btn-sq-lg btn-danger">
+                            <i class="fa fa-user fa-5x"></i><br/>
+                            Demo Danger <br>Button
+                          </a>
+                        </p>
+                      </div>
+                  </div>
+                -->
 
         {% else %}
 

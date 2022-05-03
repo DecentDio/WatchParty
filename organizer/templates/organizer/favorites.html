@@ -79,6 +79,27 @@ Account
         min-height: 230px;
         background: #b4bac0;
     }
+    .funky-moon {
+        background: #A770EF;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+        border: 3px solid #eee;
+    }
+    .refunky-moon {
+        background: #A770EF;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(-35deg, #FDB99B, #CF8BF3, #A770EF);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(-35deg, #FDB99B, #CF8BF3, #A770EF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+        border: 3px solid #eee;
+    }
+    .btn-funky-moon {
+        background: #A770EF;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+        border: 3px solid #eee;
+    }
 </style>
 </head>
 <body>
@@ -86,9 +107,9 @@ Account
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col" style="border-style: outset; border-width: 6px;">
               <!--  <div class="main-content">--> 
-                <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> My Favorites</h1>
+                <h1 class = "text-center funky-moon" style="padding: 10px 10px 10px 10px; background-color: whitesmoke; text-shadow: 1px 1px 5px whitesmoke;"> My Favorites</h1>
 
            {% if messages %}
             <ul class="messages">
@@ -119,16 +140,17 @@ Account
                 <br>
                         <div class = "text-center">
                             <input type="hidden" name="userID" value = "{{ user.id }}">
-                            <button class = "text-center" type = "submit" > Remove Favorite </button>
+                            <button class = "text-center btn-danger" type = "submit" > Remove Favorite </button>
                         </div>
+                        <br>
                     </div>
                  </form>
         <!-- </div> -->
              </div>
 
-        <div class="col">
+        <div class="col" style="border-style: outset; border-width: 6px;">
           <!--   <div class="sidebar-content"> -->
-                <h1 class = "text-center" style="padding: 10px 10px 10px 10px; background-color: whitesmoke;"> Add More Favorite Movies</h1>
+                <h1 class = "text-center refunky-moon" style="padding: 10px 10px 10px 10px; background-color: whitesmoke; text-shadow: 1px 1px 5px whitesmoke;"> Add More Favorite Movies</h1>
 
         <!-- ADD VIA MANUAL INPUT -->
         <!-- <h2>Manually Add:</h2> -->
@@ -143,7 +165,7 @@ Account
                     <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
                 
                 <div class = "col-md-12 text-center">
-                    <button class = "text-center" type="submit" >Add movie</button>
+                    <button class = "text-center btn-funky-moon" type="submit" >Add movie</button>
                 </div> 
                
                 
@@ -177,7 +199,7 @@ Account
                     
                     <div class ="text-center">
                        
-                        <button class = "text-center" id= "search_submit" type ="submit" >Search</button>
+                        <button class = "text-center btn-funky-moon" id= "search_submit" type ="submit" >Search</button>
                     </div> 
 
                 </div>
