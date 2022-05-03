@@ -19,11 +19,11 @@
             <div class="navbar-nav">            
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Watchparties
+                        WatchParties
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My Watchparties</a></li>
-                        <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create Watchparty</a></li>
+                        <li><a class="dropdown-item" href="{% url 'organizer:watchparties' %}">My WatchParties</a></li>
+                        <li><a class="dropdown-item" href="{% url 'organizer:form' %}">Create WatchParty</a></li>
                       
                     </ul>
                 </li>
@@ -71,7 +71,7 @@
             {% endif %} 
             </div>
         {% else %}
-            <p class="display-1 text-center"> No Permissions To View This Watchparty </p>
+            <p class="display-1 text-center"> No Permissions To View This WatchParty </p>
         {% endif %}
         </div>
         <style>      
@@ -125,7 +125,7 @@
                             <div class="d-flex justify-content-center">
                                 <div>
                                 {% if not finalizedWP %}
-                                    <p class="h3 text-center">Finalize Watchparty: </p>
+                                    <p class="h3 text-center">Finalize WatchParty: </p>
                                 {% else %}
                                     <p class="h3 text-center">Edit:</p>
                                 </div>
